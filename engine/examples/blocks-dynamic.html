@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head><base href="../">
+  <meta charset="utf-8">
+  <title>Блоки пресета default</title>
+  <link rel="stylesheet" href="styles/fonts-p5.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/preset-minimal.css">
+  <link rel="stylesheet" href="styles/preset-dynamic.css">
+</head>
+<body>
+<script src="components/p5-blocks.js"></script>
+<script>
+// Демонстрационные тайминги. В ролике заменяйте их значениями из words.json.
+P5Blocks.mount([
+  {
+    type: 'terminal', theme: 'dark', start: 0, end: 4,
+    title: {text: 'Одна команда сборки', times: [.12, .45, .8]},
+    label: 'render',
+    lines: [
+      {text: 'node engine/pipeline/video.mjs 73', at: 1.05, duration: .85},
+      {text: 'video: cache; audio: cache', at: 2.1, duration: .8, kind: 'result'},
+    ],
+    caption: {text: 'Готовые этапы используются повторно', times: [3.05, 3.2, 3.35, 3.5]},
+  },
+  {
+    type: 'comparison', theme: 'light', start: 4, end: 8,
+    title: {text: 'Повторный запуск быстрее', times: [4.1, 4.45, 4.8]},
+    columns: [
+      {label: 'Полный запуск', value: '81 с', description: 'Захват кадров и сборка MP4.', at: 5},
+      {label: 'Из кеша', value: '2.3 с', description: 'Повторное использование готовых этапов.', at: 6},
+    ],
+    caption: {text: 'Неизмененные кадры остаются в кеше', times: [6.8, 7, 7.2, 7.4, 7.6]},
+  },
+  {
+    type: 'chart', theme: 'electric', start: 8, end: 12,
+    title: {text: 'Время полной сборки', times: [8.1, 8.45, 8.8]},
+    max: 81000, unit: 'мс',
+    bars: [
+      {label: 'Полный запуск', value: 81000, at: 9, duration: 1},
+      {label: 'Из кеша', value: 2300, at: 10, duration: 1},
+    ],
+    caption: {text: 'Одна шкала для обоих значений', times: [10.9, 11.05, 11.2, 11.4, 11.6]},
+  },
+]);
+</script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if (location.search.includes('safe')) document.body.classList.add('safe-debug');
+init();
+render(0);
+</script>
+</body>
+</html>

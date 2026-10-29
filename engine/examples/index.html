@@ -1,0 +1,328 @@
+<!doctype html>
+<html><head><base href="../"><meta charset="utf-8">
+<link rel="stylesheet" href="styles/fonts-p5.css">
+<style>
+/* Tailwind-site look: gray-950 ink, ring borders, rounded-2xl, grid backdrop, mono eyebrows */
+:root{--o:#D97757;--o2:#C15F3C;--cream:#F0EEE6;--ink:#030712;--g500:#6B7280;--g400:#9CA3AF;--red:#EF4444;--green:#10B981;--sky:#38BDF8;--pink:#F472B6}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+body{font-family:'Google Sans',sans-serif;font-weight:900;letter-spacing:-3.6px}
+.s{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:230px 90px 400px;overflow:hidden}
+.s>*{position:relative;z-index:1}
+.w{background:#fff;color:var(--ink);--gl:rgba(3,7,18,.05);--gl2:rgba(3,7,18,.1)}
+.b{background:var(--ink);color:#fff;--gl:rgba(255,255,255,.06);--gl2:rgba(255,255,255,.12)}
+.h{font-size:124px;line-height:1.02}
+.h2{font-size:96px;line-height:1}
+.xl{font-size:250px;line-height:.9;letter-spacing:-10px}
+.sm{font-size:64px;line-height:1.05;letter-spacing:-2px}
+.o{color:var(--o)}.r{color:var(--red)}
+.mono{font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:0}
+.eye{font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:4px;text-transform:uppercase;font-size:26px;color:var(--g500);margin-bottom:30px}
+.eye b{color:var(--o);font-weight:500}
+/* card */
+.card{border-radius:32px;padding:36px 40px;background:#fff;box-shadow:0 0 0 2px rgba(3,7,18,.07),0 4px 12px rgba(3,7,18,.06),0 24px 48px -12px rgba(3,7,18,.12);font-weight:600;letter-spacing:-.5px}
+.b .card{background:rgba(255,255,255,.04);box-shadow:0 0 0 2px rgba(255,255,255,.1)}
+.ct{font-size:26px;font-weight:500;color:var(--g500);letter-spacing:0;font-family:'Google Sans',sans-serif;text-transform:uppercase;letter-spacing:3px}
+.big{font-size:120px;font-weight:900;letter-spacing:-5px;line-height:1}
+/* code window */
+.code{border-radius:32px;background:#0B1120;color:#E5E7EB;box-shadow:0 0 0 2px rgba(255,255,255,.1),0 30px 60px -20px rgba(3,7,18,.5);overflow:hidden;font-size:34px;line-height:1.6}
+.code .bar0{display:flex;align-items:center;gap:14px;padding:22px 30px;border-bottom:2px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02)}
+.code .bar0 i{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.15);display:block}
+.code .tab{margin-left:18px;font-size:26px;color:#E5E7EB;border-bottom:3px solid var(--o);padding-bottom:4px}
+.code .bd{padding:26px 34px}
+.code .ln{display:inline-block;width:46px;color:#4B5563}
+.k{color:var(--pink)}.f{color:#7DD3FC}.c{color:#6B7280}.st{color:#A5F3FC}
+.add{background:rgba(16,185,129,.12);color:#6EE7B7;margin:0 -34px;padding:0 34px}
+.del{background:rgba(239,68,68,.14);color:#FCA5A5;margin:0 -34px;padding:0 34px}
+/* badges */
+.bd2{display:inline-flex;align-items:center;gap:12px;border-radius:999px;padding:14px 28px;font-size:34px;font-weight:600;letter-spacing:-.5px;margin:0 12px 14px 0}
+.gr{background:rgba(3,7,18,.04);color:#374151;box-shadow:inset 0 0 0 2px rgba(3,7,18,.1)}
+.b .gr{background:rgba(255,255,255,.05);color:#D1D5DB;box-shadow:inset 0 0 0 2px rgba(255,255,255,.12)}
+.or{background:rgba(217,119,87,.12);color:var(--o2);box-shadow:inset 0 0 0 2px rgba(217,119,87,.3)}
+.b .or{color:#F0A487}
+.rd{background:rgba(239,68,68,.12);color:#F87171;box-shadow:inset 0 0 0 2px rgba(239,68,68,.3)}
+.gn{background:rgba(16,185,129,.12);color:#059669;box-shadow:inset 0 0 0 2px rgba(16,185,129,.3)}
+.dot{width:14px;height:14px;border-radius:50%;background:currentColor;display:inline-block}
+.stk{position:absolute;white-space:nowrap}
+.bub{border-radius:32px;padding:28px 36px;font-size:42px;font-weight:600;letter-spacing:-.8px;max-width:880px;line-height:1.22}
+.row{display:flex;flex-wrap:wrap}
+.gap{height:90px}.gap2{height:26px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.file{border-radius:24px;padding:24px 26px;font-size:30px;display:flex;gap:18px;align-items:center}
+.file .ic{width:58px;height:58px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:30px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 2px rgba(255,255,255,.1)}
+.file small{display:block;color:var(--g400);font-size:24px;margin-top:4px}
+.track{height:20px;border-radius:999px;background:rgba(3,7,18,.06);overflow:hidden;margin-top:22px}
+.track>i{display:block;height:100%;background:var(--o);border-radius:999px}
+.stat{display:flex;justify-content:space-between;align-items:flex-end}
+.slop{position:absolute;width:420px;border-radius:30px;padding:30px;color:#fff;font-weight:800;letter-spacing:-1px;font-size:38px;line-height:1.1;box-shadow:0 20px 50px rgba(80,0,120,.3)}
+.slop small{display:block;font-size:24px;font-weight:600;opacity:.85;margin-top:10px;letter-spacing:0}
+.band{background:#fff;padding:40px 36px;margin:0 -36px;border-radius:36px;box-shadow:0 0 0 2px rgba(3,7,18,.07),0 30px 60px -20px rgba(3,7,18,.25);z-index:5}
+.bars{display:flex;align-items:flex-end;gap:14px;height:150px}
+.bars i{flex:1;background:var(--ink);border-radius:10px 10px 4px 4px}
+</style></head><body>
+<div id="handle" style="position:fixed;top:120px;left:90px;right:90px;display:flex;justify-content:space-between;z-index:100;color:#fff;mix-blend-mode:difference;font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:1px;font-size:34px"><span>@const_proxima</span><span>Не подписывайся.</span></div>
+
+<!-- 1 -->
+<section class="s w" data-s="0" data-e="4.3">
+  <div class="eye" data-in="0" data-a="fade"><b>01</b> / как было</div>
+  <div class="h" data-in="0.05" style="font-size:110px">Раньше, чтобы<br>создать продукт,</div>
+  <div class="h" data-in="1.8" style="font-size:110px">нужно было</div>
+  <div class="h o" data-in="2.35" style="font-size:110px">годами учиться.</div>
+  <div class="gap"></div>
+  <div class="card" data-in="0.6" data-a="fade">
+    <div class="stat"><div><div class="ct">лет обучения</div><div class="big" id="yrs">0</div></div>
+      <div class="bars" style="width:520px" id="bars"></div></div>
+    <div class="gap2"></div>
+    <div class="row" id="books"></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="s b" data-s="4.3" data-e="5.4"><div class="eye" data-in="4.3" data-a="fade"><b>02</b> / как стало</div><div class="xl" data-in="4.4" data-a="pop" style="font-size:220px">Теперь?</div></section>
+
+<!-- 3 -->
+<section class="s w" data-s="5.4" data-e="6.6" style="align-items:flex-start">
+  <svg id="sp3" width="380" height="380" viewBox="-50 -50 100 100" data-in="5.4" data-a="pop"></svg>
+  <div class="xl" data-in="5.45" data-a="pop">Нихуя.</div>
+</section>
+
+<!-- 4 -->
+<section class="s b" data-s="6.6" data-e="9.2">
+  <div class="eye" data-in="6.6" data-a="fade"><b>03</b> / архитектура</div>
+  <div class="h2" data-in="6.65">Зачем понимать<br>архитектуру,</div>
+  <div class="h2" data-in="8.05">если есть <span class="o">Claude?</span></div>
+  <div class="gap"></div>
+  <div class="card mono" data-in="6.9" data-a="fade" style="font-size:36px;font-weight:500"><span class="o">&gt;</span> <span data-type="сделай архитектуру как у Netflix, но лучше" data-t0="7.0" data-cps="38"></span></div>
+  <div class="gap2"></div>
+  <div class="grid2">
+    <div class="file card mono" data-in="7.9" data-a="pop"><span class="ic">📄</span><div>utils.cpp<small>812 строк</small></div></div>
+    <div class="file card mono" data-in="8.05" data-a="pop"><span class="ic">📄</span><div>utils2.cpp<small>копия utils.cpp</small></div></div>
+    <div class="file card mono" data-in="8.2" data-a="pop"><span class="ic">📄</span><div>utils_final.cpp<small>не final</small></div></div>
+    <div class="file card mono" data-in="8.35" data-a="pop" style="box-shadow:inset 0 0 0 2px var(--o)"><span class="ic" style="background:var(--o)">🧠</span><div>GodObject.hpp<small style="color:#F0A487">4 812 строк</small></div></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="s w" data-s="9.2" data-e="12.25">
+  <div class="eye" data-in="9.2" data-a="fade"><b>04</b> / алгоритмы</div>
+  <div class="h2" data-in="9.25">Зачем изучать<br>алгоритмы,</div>
+  <div class="h2" data-in="10.8">если есть <span class="o">Claude?</span></div>
+  <div class="gap"></div>
+  <div class="code mono" data-in="9.5" data-a="fade" style="font-size:29px">
+    <div class="bar0"><i></i><i></i><i></i><span class="tab">sort.cpp</span></div>
+    <div class="bd">
+      <div><span class="ln">1</span><span class="k">template</span>&lt;<span class="k">class</span> T&gt;</div><div><span class="ln">2</span>std::vector&lt;T&gt; <span class="f">sort</span>(std::vector&lt;T&gt; v) {</div>
+      <div><span class="ln">3</span>&nbsp;&nbsp;<span class="c">// ✨ Optimized O(1) solution</span></div>
+      <div><span class="ln">4</span>&nbsp;&nbsp;<span class="k">return</span> v; <span class="c">// already sorted</span></div>
+      <div><span class="ln">5</span>}</div>
+    </div>
+  </div>
+  <div class="gap2"></div>
+  <div class="row"><span class="bd2 or" data-in="11.0" data-a="pop">🚀 Blazing fast</span><span class="bd2 gr" data-in="11.2" data-a="pop">O(1)</span><span class="bd2 rd" data-in="11.4" data-a="pop"><i class="dot"></i>не сортирует</span></div>
+</section>
+
+<!-- 6 -->
+<section class="s b" data-s="12.25" data-e="19.2" style="justify-content:flex-start;padding-top:210px">
+  <div class="eye" data-in="12.25" data-a="fade"><b>05</b> / документация</div>
+  <div class="h2" data-in="12.3">Зачем читать<br>документацию,</div>
+  <div class="gap2"></div>
+  <div class="sm" data-in="13.9">если можно попросить <span class="o">Claude</span> прочитать документацию,</div>
+  <div class="sm" style="margin-top:8px" data-in="16.75">которую он <span class="o">сам же и нарушил?</span></div>
+  <div class="gap"></div>
+  <div class="bub" style="background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 2px rgba(255,255,255,.1);align-self:flex-end" data-in="14.45">прочитай доку, пожалуйста 🙏</div>
+  <div class="gap2"></div>
+  <div class="bub" style="background:var(--cream);color:#141413" data-in="15.35"><span class="o">✻</span> Я внимательно изучил всю документацию! Теперь все будет идеально ✨</div>
+  <div class="gap2"></div>
+  <div class="code mono" style="font-size:30px;overflow:visible" data-in="16.9" data-a="fade">
+    <div class="bar0"><i></i><i></i><i></i><span class="tab">docs.md</span></div>
+    <div class="bd">
+      <div style="color:#FCD34D">⚠️ NEVER call this in production</div>
+      <div class="del"><span class="f">callThisInProduction</span>(); <span class="c">// by Claude</span></div>
+    </div>
+    <span class="stk bd2 rd" style="right:-10px;top:-30px;background:#2a0f12" data-in="17.95" data-a="pop" data-r="6"><i class="dot"></i>НАРУШЕНО</span>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="s w" data-s="19.2" data-e="24.3" style="justify-content:flex-start;padding-top:230px">
+  <div id="q7">
+    <div class="eye" data-in="19.2" data-a="fade"><b>06</b> / тесты</div>
+    <div class="h2" data-in="19.3">Зачем тестировать<br>код,</div>
+    <div class="h2" data-in="20.7">если он написал…</div>
+  </div>
+  <div class="h o" id="done7" style="position:absolute;top:290px;left:90px;font-size:150px;opacity:0">«Все готово».</div>
+  <div class="gap"></div>
+  <div class="code mono" data-in="19.5" data-a="fade" style="font-size:36px">
+    <div class="bar0"><i></i><i></i><i></i><span class="tab">claude-code</span></div>
+    <div class="bd">
+      <div style="color:var(--o)" id="spin7">✻ Clauding…</div>
+      <div data-in="22.5" data-a="fade" style="color:#6EE7B7">✓ Все готово!</div>
+      <div data-in="22.7" data-a="fade">✓ Production-ready</div>
+      <div data-in="22.9" data-a="fade">✓ Все тесты проходят*</div>
+      <div data-in="23.1" data-a="fade">✓ Enterprise-grade решение</div>
+      <div data-in="23.3" data-a="fade">🎉 Код полностью протестирован</div>
+      <div data-in="23.5" data-a="fade" class="c" style="font-size:26px">* тестов нет</div>
+    </div>
+  </div>
+  <div class="gap2"></div>
+  <div class="row"><span class="bd2 gn" data-in="23.0" data-a="pop"><i class="dot"></i>passing: 0/0</span><span class="bd2 gr" data-in="23.2" data-a="pop">coverage: ✨</span></div>
+</section>
+
+<!-- 8 -->
+<section class="s b" data-s="24.3" data-e="28.0" style="justify-content:flex-start">
+  <div class="eye" data-in="24.3" data-a="fade"><b>07</b> / прод</div>
+  <div class="h" data-in="24.35">Все готово,</div>
+  <div class="h" data-in="25.4">кроме того,</div>
+  <div class="h r" data-in="26.0">что нихуя<br>не работает.</div>
+  <div class="gap"></div>
+  <div class="card" data-in="25.3" data-a="fade" style="padding:28px 34px">
+    <div class="stat" style="margin-bottom:14px"><span class="ct">console</span><span class="bd2 rd" style="margin:0;font-size:28px;padding:8px 20px"><i class="dot"></i><span id="ecount">0</span> errors</span></div>
+    <div class="mono" id="errs" style="font-size:28px;line-height:1.5;color:#F87171"></div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="s w" data-s="28.0" data-e="30.15">
+  <div class="eye" data-in="28.0" data-a="fade"><b>08</b> / решение</div>
+  <div class="h" data-in="28.05">Но это<br>не проблема.</div>
+  <div class="gap"></div>
+  <div class="bub" style="background:var(--cream);color:#141413" data-in="28.9"><span class="o">✻</span> Отличная находка! Давайте исправим 🛠️</div>
+</section>
+
+<!-- 10a -->
+<section class="s b" data-s="30.15" data-e="31.9">
+  <div class="eye" data-in="30.15" data-a="fade"><b>09</b> / цикл · шаг 1</div>
+  <div class="sm" data-in="30.2">Ты просто открываешь</div>
+  <div class="h" data-in="31.05">новый чат.</div>
+  <div class="gap"></div>
+  <div class="row"><span class="bd2 or" style="font-size:44px" data-in="31.1" data-a="pop">＋ New chat</span><span class="bd2 gr" data-in="31.3" data-a="pop">чат №47</span></div>
+</section>
+<!-- 10b -->
+<section class="s w" data-s="31.9" data-e="33.7">
+  <div class="eye" data-in="31.9" data-a="fade"><b>09</b> / цикл · шаг 2</div>
+  <div class="h" data-in="31.95">Объясняешь<br>контекст.</div>
+  <div class="gap"></div>
+  <div class="card" data-in="32.0" data-a="fade" style="font-size:34px;font-weight:500;line-height:1.4"><span data-type="короче как я уже говорил в прошлом чате у нас проект на C++ но не тот CMake а другой и там есть utils_final.cpp но не трогай его и еще" data-t0="32.05" data-cps="70"></span></div>
+</section>
+<!-- 10c -->
+<section class="s b" data-s="33.7" data-e="35.0">
+  <div class="eye" data-in="33.7" data-a="fade"><b>09</b> / цикл · шаг 3</div>
+  <div class="h" data-in="33.75">Отправляешь<br>файлы.</div>
+  <div class="gap"></div>
+  <div class="grid2">
+    <div class="file card mono" data-in="33.85" data-a="pop"><span class="ic">📎</span><div>utils_final_v2.cpp<small>12 KB</small></div></div>
+    <div class="file card mono" data-in="34.0" data-a="pop"><span class="ic">🖼️</span><div>Screenshot (37).png<small>2.1 MB</small></div></div>
+    <div class="file card mono" data-in="34.15" data-a="pop"><span class="ic">📎</span><div>logs_ВСЕ.txt<small>48 MB</small></div></div>
+    <div class="file card mono" data-in="34.3" data-a="pop" style="box-shadow:inset 0 0 0 2px var(--o)"><span class="ic" style="background:var(--o)">🙏</span><div>ПОЖАЛУЙСТА.md<small>1 строка</small></div></div>
+  </div>
+</section>
+<!-- 10d -->
+<section class="s w" data-s="35.0" data-e="36.45">
+  <div class="eye" data-in="35.0" data-a="fade"><b>09</b> / цикл · шаг 4</div>
+  <div class="h" data-in="35.05">Получаешь<br>исправление.</div>
+  <div class="gap"></div>
+  <div class="code mono" data-in="35.15" data-a="fade">
+    <div class="bar0"><i></i><i></i><i></i><span class="tab">fix.diff</span></div>
+    <div class="bd"><div class="add">+ <span class="k">if</span> (bug) { bug = <span class="k">false</span>; }</div><div class="add">+ <span class="c">// Fixed! ✨</span></div></div>
+  </div>
+</section>
+<!-- 10e -->
+<section class="s b" data-s="36.45" data-e="38.0">
+  <div class="eye" data-in="36.45" data-a="fade"><b>09</b> / цикл · шаг 5</div>
+  <div class="h" data-in="36.5">Ломаешь<br><span class="r">другое.</span></div>
+  <div class="gap"></div>
+  <div class="code mono" data-in="36.6" data-a="fade" style="font-size:32px">
+    <div class="bar0"><i></i><i></i><i></i><span class="tab">fix.diff</span></div>
+    <div class="bd"><div class="del">- <span class="k">bool</span> <span class="f">login</span>() {…}</div><div class="del">- <span class="k">void</span> <span class="f">payments</span>() {…}</div><div class="del">- <span class="k">int</span> <span class="f">main</span>() {…}</div></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="s w" data-s="38.0" data-e="44.6">
+  <div class="eye" data-in="38.0" data-a="fade"><b>10</b> / ресурсы</div>
+  <div class="h2" data-in="38.2">И так до тех пор,<br>пока не закончится</div>
+  <div class="gap"></div>
+  <div class="card" data-in="39.9"><div class="stat"><span class="ct">контекст</span><span class="big" style="font-size:72px" id="p1"></span></div><div class="track"><i id="b1"></i></div></div>
+  <div class="gap2"></div>
+  <div class="card" data-in="40.75"><div class="stat"><span class="ct">подписка</span><span class="big" style="font-size:72px" id="p2"></span></div><div class="track"><i id="b2"></i></div></div>
+  <div class="gap2"></div>
+  <div class="card" data-in="41.3"><div class="stat"><span class="ct" style="color:var(--o2)">или вера в человечество</span><span class="big" style="font-size:72px" id="p3"></span></div><div class="track"><i id="b3"></i></div></div>
+  <div class="stk bd2 gr mono" style="left:90px;top:1500px;font-size:28px;background:#fff" data-in="41.6" data-a="pop" data-r="-2">⚠️ Claude usage limit reached · resets 3:00</div>
+</section>
+
+<!-- 12 -->
+<section class="s b" data-s="44.6" data-e="46.95" style="align-items:center;text-align:center">
+  <svg id="sp12" width="500" height="500" viewBox="-50 -50 100 100" data-in="44.65" data-a="pop" data-d="0.6"></svg>
+  <div class="gap"></div>
+  <div class="xl" data-in="45.0" style="font-size:220px">Claude.</div>
+</section>
+
+<!-- 13 -->
+<section class="s w" data-s="46.95" data-e="50.4">
+  <div id="slops" style="position:absolute;inset:0;z-index:0"></div>
+  <div class="band">
+    <div class="eye" data-in="47.0" data-a="fade"><b>11</b> / результат</div>
+    <div class="h" data-in="47.1">Теперь каждый<br>может создать</div>
+    <div class="h o" data-in="48.65">что угодно,</div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="s b" data-s="50.4" data-e="54.1">
+  <div class="eye" data-in="50.4" data-a="fade"><b>12</b> / нюанс</div>
+  <div class="h" data-in="50.5">кроме понимания того,</div>
+  <div class="h o" data-in="51.6">что он создал.</div>
+  <div class="gap"></div>
+  <div class="row" data-in="52.7" data-a="fade"><span class="bd2 gr">✻ Сделано с Claude. Наверное.</span></div>
+</section>
+
+<script>
+const clamp=x=>Math.max(0,Math.min(1,x));
+const out3=x=>1-Math.pow(1-x,3);
+const back=x=>{const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+
+function spark(svg){let s='';const n=12;for(let i=0;i<n;i++){const a=i/n*Math.PI*2+(i%2?.12:0);const L=i%3==0?46:i%2?36:42;s+=`<line x1="0" y1="0" x2="${(Math.cos(a)*L).toFixed(1)}" y2="${(Math.sin(a)*L).toFixed(1)}" stroke="#D97757" stroke-width="${i%2?7:9}" stroke-linecap="round"/>`}svg.innerHTML=s}
+spark(sp3);spark(sp12);
+
+books.innerHTML=['SICP','CLRS','Clean Code','TCP/IP','GoF','Кнут, т.1'].map((b,i)=>`<span class="bd2 ${i==4?'or':'gr'}" style="font-size:28px;padding:10px 22px" data-in="${(0.9+i*0.3).toFixed(2)}" data-a="pop">${b}</span>`).join('');
+bars.innerHTML=[30,45,55,70,80,92,100].map((h,i)=>`<i data-h="${h}" data-t="${(1.2+i*0.3).toFixed(2)}" style="${i==6?'background:var(--o)':''}"></i>`).join('');
+const barEls=[...bars.children];
+
+const ER=['Segmentation fault (core dumped)','fatal error: utils_final.hpp: No such file','undefined reference to `vtable for Claude`','error: \'std::vibes\' has not been declared','terminate called after throwing std::bad_alloc','double free or corruption (!prev)','AddressSanitizer: heap-use-after-free','LNK2019: unresolved external symbol main'];
+errs.innerHTML=ER.map((e,i)=>`<div data-in="${(25.4+i*0.25).toFixed(2)}" data-a="fade" data-d="0.1" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">✗ ${e}</div>`).join('');
+
+const SL=[['🚀 Revolutionize everything','AI-powered • Web3 • Synergy'],['TodoApp Pro Max ✨','Powered by GPT, Claude и вера'],['Uber для котов 🐈','Seed round: мама'],['✨ Seamless. Scalable.','Some more words here'],['Startup #8392','Как #8391, но с градиентом'],['🔥 10x your workflow','Lorem ipsum dolor AI'],['NeuroCRM™','Убийца Notion. Опять.'],['💜 Built with AI','В процессе: понимание'],['SaaS для SaaS','Финтех • Агенты • ✨'],['Landing v47_final','Get started → (не работает)']];
+const G=['linear-gradient(135deg,#7F00FF,#E100FF)','linear-gradient(135deg,#6366F1,#EC4899)','linear-gradient(135deg,#06B6D4,#8B5CF6)','linear-gradient(135deg,#F472B6,#FB923C)','linear-gradient(135deg,#4F46E5,#22D3EE)'];
+const pos=[[40,240],[600,200],[-60,560],[640,600],[60,1340],[600,1360],[-80,1640],[580,1650],[330,1790],[330,1520]];
+slops.innerHTML=SL.map((c,i)=>`<div class="slop" data-in="${(47.0+i*0.22).toFixed(2)}" data-a="pop" data-r="${((rnd()-.5)*16).toFixed(1)}" style="left:${pos[i][0]}px;top:${pos[i][1]}px;background:${G[i%5]}">${c[0]}<small>${c[1]}</small></div>`).join('');
+
+const scenes=[...document.querySelectorAll('section')];
+const els=[...document.querySelectorAll('[data-in]')];
+const types=[...document.querySelectorAll('[data-type]')];
+const errEls=[...errs.children];
+
+function apply(el,t){
+  const a=el.dataset.a||'up',d=+(el.dataset.d||(a=='pop'?.4:.3));const p=clamp((t-+el.dataset.in)/d);const r=+(el.dataset.r||0);
+  el.style.opacity=a=='pop'?clamp(p*3):p;
+  if(a=='up')el.style.transform=`translateY(${(1-out3(p))*60}px)`;
+  else if(a=='pop')el.style.transform=`scale(${p<=0?.5:.5+.5*back(p)}) rotate(${r}deg)`;
+  else el.style.transform=r?`rotate(${r}deg)`:'';
+}
+function render(t){
+  for(const s of scenes){const on=t>=+s.dataset.s&&t<+s.dataset.e;s.style.display=on?'flex':'none';
+    if(on){const k=clamp((t-+s.dataset.s)/.35);s.style.transform=`scale(${1.035-.035*out3(k)})`}}
+  for(const el of els)apply(el,t);
+  for(const el of types){const n=Math.floor(Math.max(0,t-+el.dataset.t0)*+el.dataset.cps);const f=el.dataset.type;el.textContent=f.slice(0,n)+(n<f.length&&Math.floor(t*3)%2?'▍':'')}
+  yrs.textContent=Math.min(7,Math.max(0,Math.floor((t-1.2)/0.3)+1));
+  for(const b of barEls)b.style.height=(+b.dataset.h*out3(clamp((t-+b.dataset.t)/.35)))+'%';
+  ecount.textContent=errEls.filter(e=>t>=+e.dataset.in).length*137;
+  sp3.style.rotate=(t*120)+'deg';sp12.style.rotate=(t*25)+'deg';
+  const W=['✻ Clauding…','✻ Percolating…','✻ Noodling…','✻ Vibing…','✻ Manifesting…','✻ Hallucinating…'];
+  spin7.textContent=t<22.5?W[Math.max(0,Math.floor((t-19.5)/0.45))%6]:'✻ Done in 4m 12s · 0 tests run';
+  q7.style.opacity=1-clamp((t-22.2)/.2);done7.style.opacity=clamp((t-22.4)/.15);done7.style.transform=`scale(${.8+.2*back(clamp((t-22.4)/.4))})`;
+  const m=(id,pid,t0,t1)=>{const v=Math.round(100*(1-out3(clamp((t-t0)/(t1-t0)))));document.getElementById(id).style.width=v+'%';const P=document.getElementById(pid);P.textContent=v+'%';P.style.color=v==0?'#EF4444':''};
+  m('b1','p1',40.1,41.0);m('b2','p2',40.95,41.9);m('b3','p3',42.3,43.6);
+}
+window.render=render;
+</script></body></html>

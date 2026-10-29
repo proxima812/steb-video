@@ -1,0 +1,338 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<style>
+/* 5 - tatarverse: центров 410, а ищет одна бабушка. Сториборд output/plan.md. Свои классы - с префиксом tv-, только раскладка и размеры.
+   Весь ролик по просьбе пользователя на белом фоне с палитрой red. Компоненты - набор p5-world.css (.card, .win, .field, .list, .tbl, .btn, .tag, .tile, .tog);
+   акцентная карточка - .tv-acc (подложка палитры): на белом фоне стекло не читается */
+.p5w .tv-acc{background:var(--pal-bg);box-shadow:none}
+.p5w .tv-acc :is(.field,.tile){background:var(--card)}
+.p5w .tv-acc :is(.li+.li,.tr+.tr){border-color:color-mix(in srgb,var(--pal-fg) 16%,transparent)}
+.p5w .tv-c{align-self:center;text-align:center}
+.p5w .tv-top{justify-content:flex-start;padding-top:290px}
+.p5w .tv-hk{font-size:110px;letter-spacing:-3.5px;width:100%}
+.p5w .tv-w{width:800px;align-self:center;flex:none}
+.p5w .tv-full{width:950px;align-self:center;flex:none}
+/* поле: высота постоянна, печатаемый текст не меняет верстку (камера меряет цель один раз) */
+.p5w .tv-w.field,.p5w .field.tv-big{height:135px;box-sizing:border-box;font-size:50px;font-weight:500;letter-spacing:-1px}
+.p5w .field.tv-big>.mi{font-size:60px}
+.p5w [data-type]{white-space:nowrap}
+/* подсветка по времени: data-mk="t" дает --k 0..1 */
+.p5w .tv-hl{background:color-mix(in srgb,var(--pal-bg) calc(var(--k,0)*100%),transparent);color:color-mix(in srgb,var(--pal-fg) calc(var(--k,0)*100%),currentColor)}
+.p5w .tv-ring{box-shadow:0 0 0 calc(2px + 4px*var(--k,0)) color-mix(in srgb,var(--pal-fg) calc(var(--k,0)*100%),var(--ring))}
+.p5w .tv-lab{font-family:Inter;font-weight:700;font-size:64px;letter-spacing:-2px}
+.p5w .tv-tags{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.p5w .tv-tags .tag{font-size:38px;padding:12px 28px}
+/* списки и таблицы ролика крупнее базовых */
+.p5w .s .tv-list .li{font-size:48px;padding:30px 0}
+.p5w .tv-list .li>.ib{font-size:72px}
+.p5w .tv-list .li-m{font-size:38px}
+.p5w .tv-list .li>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.p5w .tv-list .li>div b{font-family:Inter;font-weight:700;font-size:50px;letter-spacing:-1.5px;line-height:1.1}
+.p5w .tv-list .li>div span{font-size:38px;color:var(--mut)}
+.p5w .s .tv-tbl{font-size:54px;font-weight:500;letter-spacing:-1px}
+.p5w .tv-tbl .tr{padding:24px 6px}
+.p5w .tv-tbl .r{font-family:Inter;font-weight:800;font-size:60px;color:var(--pal-fg)}
+/* 1 хук */
+.p5w .tv-hook{padding:64px 44px 64px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.p5w #n410{font-size:420px}
+.p5w .tv-world{position:absolute;right:var(--sz-x);bottom:260px;width:480px;display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right}
+.p5w .tv-world .num{font-size:280px;color:var(--pal-fg)}
+.p5w .tv-world .tv-sub{font-size:44px;color:var(--mut);letter-spacing:-1px}
+/* 2 ответ */
+.p5w .tv-ans{padding:40px 40px 44px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.p5w .tv-ans .num{font-size:400px;color:var(--pal-fg)}
+.p5w .tv-ans .tag{font-size:40px;padding:12px 30px}
+.p5w .s .tv-chat .bub{font-size:64px}
+.p5w #msg,.p5w #msg+.bub{font-size:72px}
+/* 3 запрос: окно терминала */
+.p5w .tv-term .win-body{padding:44px 44px 50px;font-size:56px;line-height:1.35;gap:14px}
+.p5w .tv-term .k{color:var(--mut)}
+/* 4 Канада */
+.p5w .tv-cn{padding:40px 46px 24px;display:flex;flex-direction:column;gap:10px}
+.p5w .tv-cn .hd{display:flex;align-items:flex-end;gap:28px}
+.p5w .tv-cn .num{font-size:240px}
+.p5w .tv-cn .hd b{font-family:Inter;font-weight:700;font-size:62px;letter-spacing:-2px;line-height:1.05;padding-bottom:24px}
+.p5w .tv-chips{display:flex;flex-wrap:wrap;gap:18px;justify-content:center}
+.p5w .tv-chips .chip{font-size:44px;padding:18px 34px}
+/* 5 звонок */
+.p5w .tv-call{padding:64px 50px;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+.p5w .tv-call .ib{font-size:150px}
+.p5w .tv-call .who{font-family:Inter;font-weight:800;font-size:100px;letter-spacing:-3px}
+.p5w .tv-call .st{font-size:46px;color:var(--mut)}
+.p5w .tv-btns{display:flex;gap:28px;margin-top:20px}
+.p5w .tv-btns .btn{font-size:44px;padding:24px 42px}
+.p5w .tv-dead{opacity:.55}
+/* 6 вопрос сайту */
+.p5w .tv-why{padding:50px 50px 60px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.p5w .tv-why .num{font-size:520px;color:var(--pal-fg)}
+/* 7 каталог: окно браузера */
+.p5w .tv-site .win-body{padding:30px 40px 20px;gap:18px}
+.p5w .tv-addr{font-family:Inter;font-weight:800;font-size:76px;letter-spacing:-3px;height:130px}
+.p5w .tv-addr .acc{color:var(--pal-fg)}
+.p5w .tv-site .h2{font-size:84px;margin-top:6px}
+/* 8 фильтры и печать */
+.p5w .tv-near{padding:6px 40px}
+.p5w .tv-near .li>.ib{font-size:72px}
+.p5w .tv-near .tog{width:132px;height:76px}
+.p5w .tv-near .tog::after{width:60px;height:60px;translate:calc(var(--k,0)*56px) 0}
+.p5w .tv-print{align-self:center;font-size:52px;padding:26px 56px;
+  background:color-mix(in srgb,var(--card) calc(100%*var(--done,0)),var(--acc));color:color-mix(in srgb,var(--acc) calc(100%*var(--done,0)),var(--on));
+  box-shadow:inset 0 0 0 calc(2px*var(--done,0)) var(--ring);translate:0 calc(6px*var(--press,0));filter:brightness(calc(1 - .1*var(--hover,0) - .1*var(--press,0)))}
+.p5w .tv-print .mi{font-size:58px}
+.p5w .tv-sheet{padding:34px 44px 38px;display:flex;flex-direction:column;gap:6px}
+.p5w .tv-sheet h4{margin:0 0 6px;font-family:Inter;font-weight:800;font-size:58px;letter-spacing:-2px}
+.p5w .s .tv-sheet .tv-tbl{font-size:46px}
+.p5w .tv-sheet .tr>span:last-child{color:var(--mut);font-size:38px;text-align:right}
+.p5w .tv-sheet .tag{align-self:flex-start;margin-top:14px;font-size:40px;padding:12px 28px}
+/* 9 лист для бабушки */
+.p5w .tv-paper{padding:44px 50px}
+.p5w .tv-paper h4{font-size:70px}
+.p5w .s .tv-paper .tv-tbl{font-size:56px}
+.p5w .tv-paper .tr>span:last-child{font-size:44px}
+.p5w .tv-to{display:flex;align-items:baseline;gap:24px;margin-top:22px;padding:26px 30px;border-radius:var(--r-in);font-family:Inter;font-weight:800;font-size:76px;letter-spacing:-2.5px}
+.p5w .tv-to .lbl{font-family:'Google Sans';font-weight:500;font-size:48px;color:var(--mut);letter-spacing:-1px}
+.p5w .tv-to [data-p4-swap]>*{white-space:nowrap}
+/* 10 кто ищет */
+.p5w .tv-who{padding:12px 46px 20px}
+.p5w .s .tv-who .tv-tbl{font-size:76px}
+.p5w .tv-who .tr{padding:58px 0}
+.p5w .tv-who .tr>:last-child{justify-self:end}
+.p5w .tv-who .chip{font-size:44px;padding:14px 32px}
+.p5w .tv-who .ghost{color:var(--mut)}
+/* 11 Монреаль */
+.p5w .tv-oy{display:flex;align-items:flex-end;justify-content:space-between;width:950px;align-self:center}
+.p5w .tv-oy .num{font-size:280px;color:var(--pal-fg)}
+.p5w .tv-oy .tv-lab{font-size:60px;text-align:right;padding-bottom:30px}
+.p5w .tv-res{padding:6px 40px}
+/* 12 двое */
+.p5w .tv-duo{padding:40px 40px 50px;display:flex;flex-direction:column;align-items:center;gap:30px}
+.p5w .tv-duo .h3{white-space:nowrap}
+.p5w .tv-duo .num{font-size:380px;color:var(--pal-fg)}
+.p5w .tv-pair{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:100%}
+.p5w .tv-pair .tile{padding:46px 20px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.p5w .tv-pair b{font-family:Inter;font-weight:800;font-size:70px;letter-spacing:-2px}
+.p5w .tv-pair .tag{font-size:40px;padding:12px 30px}
+.p5w .tv-foot{font-size:48px;color:var(--mut);text-align:center;letter-spacing:-1px}
+</style>
+</head><body class="p5w" data-txt="blur">
+
+<!-- 1 хук: 410 центров, пустой поиск -->
+<section class="s white pal-red tv-top" data-s="0" data-e="4.629" data-punch="0.789:.018" data-camk="0.789 #hk410 1.08 .7; 1.909 c 1 .7; 3.429 #world 1.08 .7">
+  <div class="h2 tv-hk tv-c" data-lines="-1,-1,-1">А кто <span class="acc">ищет?</span></div>
+  <div class="gap"></div>
+  <div class="card tv-acc tv-hook tv-w" id="hk410" data-safe>
+    <div class="num" id="n410">410</div>
+    <div class="tv-lab"><span data-in="1.269" data-a="blur" class="acc">татарских</span> центров</div>
+    <div class="gap2"></div>
+    <div class="field tv-big tv-ring" data-mk="1.909" style="width:100%"><i class="mi">search</i><span class="ph">Найти своих</span></div>
+  </div>
+  <div class="tv-world" id="world" data-safe>
+    <div class="num" data-in="2.789" data-a="blur">53</div>
+    <div class="tv-lab" data-in="3.429" data-a="blur">страны</div>
+    <div class="tv-sub" data-in="3.669" data-a="blur">и 207 городов</div>
+  </div>
+  <img class="ava bl" src="../video/avatar/bl.png" alt="" data-exit="4.0,.5" style="--ava-h:440px">
+</section>
+
+<!-- 2 сколько ищет: ? -> 0 -->
+<section class="s white pal-red" data-s="4.629" data-e="8.899" data-tr="defocus" data-punch="7.919:.018" data-camk="5.909 #ans 1.08 .7">
+  <div class="h2 tv-hk tv-c" data-lines="5.242,5.429,5.909">Сколько людей <span class="acc">ищет?</span></div>
+  <div class="gap"></div>
+  <div class="card tv-ans tv-w tv-acc" id="ans" data-safe>
+    <div class="field tv-big" data-in="4.75" data-a="blur" style="width:100%"><i class="mi">search</i><span class="ph">татарский центр</span></div>
+    <div class="num" data-in="4.9" data-a="blur" data-p4-swap="7.919,.45"><span>?</span><span>0</span></div>
+    <div class="tv-lab" data-in="4.9" data-a="blur">человек ищут</div>
+    <span class="tag" data-in="7.919" data-a="blur">по версии Kyle</span>
+  </div>
+  <div class="gap"></div>
+  <div class="chat tv-chat tv-w"><div class="bub me" data-in="6.849" data-a="blur"><span class="bub-who">Callie</span>Сколько?</div></div>
+</section>
+
+<!-- 3 все ищут чак-чак: окно терминала и выдача -->
+<section class="s white pal-red" data-s="8.899" data-e="11.309" data-tr="down" data-camk="10.1 #q 1.1 .7">
+  <div class="h2 tv-hk tv-c" data-lines="8.899,9.299,9.699,10.179">Все ищут<br><span class="acc">рецепт<br>чак-чака</span></div>
+  <div class="gap"></div>
+  <div class="win tv-term tv-w" id="q" data-safe>
+    <div class="win-bar"><i></i><i></i><i></i><b>поиск</b></div>
+    <div class="win-body">
+      <div><span class="k">&gt;</span> <span data-strike="9.299">найти татарский центр</span></div>
+      <div><span class="k">&gt;</span> <span data-type="рецепт чак-чака" data-t0="9.699" data-cps="22"></span></div>
+    </div>
+  </div>
+  <div class="gap2"></div>
+  <div class="card tv-res tv-w">
+    <div class="list tv-list">
+      <div class="li" data-in="10.25" data-a="blur"><span class="ib"><i class="mi">restaurant</i></span>Чак-чак за 30 минут</div>
+      <div class="li" data-in="10.55" data-a="blur"><span class="ib"><i class="mi">restaurant</i></span>Чак-чак как у бабушки</div>
+      <div class="li" data-in="10.85" data-a="blur"><span class="ib"><i class="mi">restaurant</i></span>Чак-чак без меда</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 а если я в Канаде -->
+<section class="s white pal-red" data-s="11.309" data-e="15.399" data-tr="whip" data-wipe="left" data-camk="13.3 #cn 1.08 .9; 14.6 c 1 .6">
+  <div class="h2 tv-hk tv-c" data-lines="11.309">Подожди</div>
+  <div class="gap"></div>
+  <div class="field tv-w on" data-in="12.349" data-a="blur"><i class="mi">search</i><span data-type="найти своих в Канаде" data-t0="12.669" data-cps="11"></span></div>
+  <div class="gap"></div>
+  <div class="tv-chips tv-full" data-in="12.6" data-a="blur">
+    <span class="chip">Россия</span><span class="chip">Казахстан</span><span class="chip">США</span><span class="chip tv-hl" data-mk="13.149">Канада</span>
+  </div>
+  <div class="gap"></div>
+  <div class="card tv-cn tv-w tv-acc" id="cn" data-in="13.35" data-a="blur">
+    <div class="hd"><div class="num">6</div><b>центров<br>в Канаде</b></div>
+    <div class="tbl tv-tbl" style="--cols:1fr 160px">
+      <div class="tr" data-in="13.789" data-a="blur"><span>Монреаль</span><span class="r">4</span></div>
+      <div class="tr" data-in="13.909" data-a="blur"><span>Торонто</span><span class="r">1</span></div>
+      <div class="tr" data-in="14.189" data-a="blur"><span>Калгари</span><span class="r">1</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 не хочешь: ждешь звонка бабушки -->
+<section class="s white pal-red" data-s="15.399" data-e="18.619" data-tr="dissolve" data-camk="17.3 #call 1.1 .7">
+  <div class="h2 tv-hk tv-c" data-lines="15.399,15.639">Не <span class="acc">хочешь.</span></div>
+  <div class="gap"></div>
+  <div class="field tv-w tv-dead" data-in="15.5" data-a="blur"><i class="mi">search</i><span data-strike="16.499">найти своих в Канаде</span></div>
+  <div class="gap"></div>
+  <div class="card tv-call tv-w" id="call" data-in="16.659" data-a="blur">
+    <span class="ib"><i class="mi">call</i></span>
+    <div class="who" data-p4-swap="17.219,.45"><span>...</span><span>Бабушка</span></div>
+    <div class="st" data-in="17.659" data-a="blur">входящий звонок</div>
+    <div class="tv-btns" data-in="17.9" data-a="blur"><span class="btn ghost"><i class="mi">call_end</i>позже</span><span class="btn"><i class="mi">call</i>ответить</span></div>
+  </div>
+</section>
+
+<!-- 6 Сабантуй / а сайт зачем -->
+<section class="s white pal-red" data-s="18.619" data-e="22.769" data-tr="up" data-camk="19.85 #msg 1.08 .6; 21.2 c 1 1.2">
+  <div class="chat tv-chat tv-w" data-safe style="width:720px">
+    <div class="bub bot" id="msg" data-in="18.619" data-a="blur"><span class="bub-who">Бабушка</span><span data-wd="18.619,.1" data-wd-times="18.619,18.819,18.939,19.459">Там на <b>Сабантуй</b> зовут</span></div>
+    <div class="bub me" data-in="20.599" data-a="blur"><span class="bub-who">Callie</span><span data-wd="20.599,.1" data-wd-times="20.599,20.839,21.079,21.399,21.719">Ну а сайт тогда зачем?</span></div>
+  </div>
+  <div class="gap2"></div>
+  <div class="card tv-why tv-w" id="why" data-in="21.079" data-a="blur">
+    <div class="field tv-big" style="width:100%"><i class="mi">language</i>сайт</div>
+    <div class="num" data-in="21.719" data-a="blur">?</div>
+  </div>
+</section>
+
+<!-- 7 tatarverse.cc: каталог в окне браузера -->
+<section class="s white pal-red" data-s="22.769" data-e="25.489" data-tr="defocus" data-camk="24.689 #tab 1.08 .7">
+  <div class="win tv-site tv-w" id="addr" data-safe>
+    <div class="win-bar"><i></i><i></i><i></i><b>каталог центров</b></div>
+    <div class="win-body">
+      <div class="field tv-addr"><i class="mi">public</i><span data-wd="22.769,.1" data-wd-times="22.769,23.889">tatarverse <span class="acc">.cc</span></span></div>
+      <div class="h2" data-lines="24.689">Каталог</div>
+      <div class="tbl tv-tbl" id="tab" style="--cols:1fr 160px" data-in="23.489" data-a="blur">
+        <div class="tr"><span>Россия</span><span class="r">202</span></div>
+        <div class="tr"><span>Казахстан</span><span class="r">44</span></div>
+        <div class="tr"><span>Кыргызстан</span><span class="r">15</span></div>
+        <div class="tr"><span>США</span><span class="r">12</span></div>
+        <div class="tr on"><span>Канада</span><span class="r">6</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="gap2"></div>
+  <div class="tv-tags tv-full" data-in="24.9" data-a="blur"><span class="tag">410 центров</span><span class="tag">53 страны</span><span class="tag">207 городов</span></div>
+</section>
+
+<!-- 8 фильтры, рядом, печать в PDF -->
+<section class="s white pal-red" data-s="25.489" data-e="29.259" data-tr="down" data-punch="28.289:.018" data-camk="26.75 #near 1.08 .6; 28.289 #sheet 1.08 .6"
+  data-cur="26.75 #print .7; 27.649 #print click .3; 28.6 hide">
+  <div class="h2 tv-hk tv-c" data-lines="25.489">Фильтры</div>
+  <div class="gap"></div>
+  <div class="tv-chips tv-full" data-in="25.55" data-a="blur"><span class="chip on">Страна: Канада</span><span class="chip">Регион: все</span><span class="chip">Тип: все</span></div>
+  <div class="card tv-near tv-w" id="near" data-in="26.169" data-a="blur">
+    <div class="list tv-list"><div class="li"><span class="ib"><i class="mi">near_me</i></span><b style="font-family:Inter">Центры рядом</b><span class="li-m" style="display:flex"><i class="tog" data-mk="26.609"></i></span></div></div>
+  </div>
+  <span class="btn tv-print" id="print" data-in="26.4" data-a="blur"><i class="mi">print</i>Печать</span>
+  <div class="gap"></div>
+  <div class="card tv-sheet tv-w tv-acc" id="sheet" data-in="28.289" data-a="blur">
+    <h4>Канада, Монреаль</h4>
+    <div class="tbl tv-tbl" style="--cols:1fr auto">
+      <div class="tr"><span>«Мирас»</span><span>Монреаль</span></div>
+      <div class="tr"><span>Montrealtatar</span><span>Монреаль</span></div>
+      <div class="tr"><span>Alima Academy</span><span>Монреаль</span></div>
+    </div>
+    <span class="tag on"><i class="mi">picture_as_pdf</i>Сохранить как PDF</span>
+  </div>
+</section>
+
+<!-- 9 печать для бабушки -->
+<section class="s white pal-red tv-top" data-s="29.259" data-e="32.649" data-tr="dissolve" data-camk="30.219 #paper 1.08 .7; 31.5 c 1 1.1">
+  <div class="h2 tv-hk tv-c" data-lines="29.259">Печать?</div>
+  <div class="gap"></div>
+  <div class="card tv-sheet tv-paper tv-w" id="paper" data-safe>
+    <h4>Канада, Монреаль</h4>
+    <div class="tbl tv-tbl" style="--cols:1fr auto">
+      <div class="tr"><span>«Мирас»</span><span>Монреаль</span></div>
+      <div class="tr"><span>Montrealtatar</span><span>Монреаль</span></div>
+      <div class="tr"><span>Alima Academy</span><span>Монреаль</span></div>
+    </div>
+    <div class="tv-to tv-hl" id="to" data-in="30.219" data-a="blur" data-mk="31.509"><span class="lbl">для кого:</span><span data-p4-swap="31.509,.45"><span>?</span><span>бабушки</span></span></div>
+  </div>
+  <img class="ava bl" src="../video/avatar/bl.png" alt="" data-in="31.509" data-a="rise" style="--ava-h:440px">
+</section>
+
+<!-- 10 она единственная, кто ищет / ладно, ищу -->
+<section class="s white pal-red" data-s="32.649" data-e="36.969" data-tr="down" data-camk="33.969 #who 1.08 .7; 35.869 #srch 1.08 .7">
+  <div class="h2 tv-hk tv-c" data-lines="32.929,33.729,33.969">Единственная, <span class="acc">кто ищет</span></div>
+  <div class="gap"></div>
+  <div class="card tv-who tv-w" id="who" data-in="32.7" data-a="blur">
+    <div class="tbl tv-tbl" style="--cols:1fr auto">
+      <div class="tr"><span>Бабушка</span><span class="chip tv-hl" data-mk="33.969">ищет</span></div>
+      <div class="tr"><span class="ghost">Kyle</span><span class="chip ghost">не ищет</span></div>
+      <div class="tr"><span data-p4-swap="34.989,.45"><span class="ghost">...</span><span>Callie</span></span><span class="chip tv-hl" data-mk="35.869" data-in="35.869" data-a="blur">ищет</span></div>
+    </div>
+  </div>
+  <div class="gap"></div>
+  <div class="field tv-w on" id="srch" data-in="35.869" data-a="blur"><i class="mi">search</i><span data-type="Монреаль" data-t0="36.0" data-cps="12"></span></div>
+</section>
+
+<!-- 11 ой, в Монреале четыре -->
+<section class="s white pal-red" data-s="36.969" data-e="39.549" data-tr="dissolve" data-camk="38.249 #cnt 1.12 .7">
+  <div class="tv-oy" id="cnt" data-safe>
+    <div class="h2 tv-hk" data-lines="36.969">Ой.</div>
+    <div style="display:flex;align-items:flex-end;gap:20px"><div class="num" data-in="38.249" data-a="blur">4</div><div class="tv-lab" data-in="38.249" data-a="blur">центра</div></div>
+  </div>
+  <div class="gap"></div>
+  <div class="card tv-res tv-w">
+    <div class="list tv-list">
+      <div class="li on" data-in="37.05" data-a="blur"><span class="ib solid"><i class="mi">location_on</i></span><div><b>Татарский культурный центр «Мирас»</b><span>Канада, Монреаль</span></div></div>
+      <div class="li" data-in="37.529" data-a="blur"><span class="ib"><i class="mi">location_on</i></span><div><b>Montrealtatar</b><span>Канада, Монреаль</span></div></div>
+      <div class="li" data-in="37.8" data-a="blur"><span class="ib"><i class="mi">location_on</i></span><div><b>Ассоциация татар г. Монреаля</b><span>Канада, Монреаль</span></div></div>
+      <div class="li" data-in="38.089" data-a="blur"><span class="ib"><i class="mi">location_on</i></span><div><b>Alima Academy</b><span>Канада, Монреаль</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 теперь вас двое -->
+<section class="s white pal-red" data-s="39.549" data-e="41.9" data-tr="up" data-punch="41.049:.018" data-camk="40.769 #duo 1.08 .6">
+  <div class="h2 tv-hk tv-c" data-lines="39.549,39.709">Ну <span class="acc">все.</span></div>
+  <div class="gap"></div>
+  <div class="card tv-duo tv-w" id="duo" data-safe>
+    <div class="h3" data-lines="40.409,40.769">Теперь вас</div>
+    <div class="num" data-p4-swap="41.049,.4"><span>1</span><span>2</span></div>
+    <div class="tv-pair">
+      <div class="tile"><b>Бабушка</b><span class="tag on">ищет</span></div>
+      <div class="tile on" data-in="40.769" data-a="blur"><b>Callie</b><span class="tag on">ищет</span></div>
+    </div>
+  </div>
+  <div class="gap"></div>
+  <div class="tv-foot">tatarverse.cc</div>
+</section>
+
+<section class="s white pal-red outro" data-s="41.9" data-e="44.4" data-tr="defocus" data-deco="none"></section>
+
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="components/p5-ui.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+</body></html>

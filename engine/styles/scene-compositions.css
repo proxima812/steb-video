@@ -1,0 +1,33 @@
+/* Opt-in staging, independent of component surfaces. Fixed canvas matches the renderer.
+   No global overrides: legacy scenes do not carry data-composition. */
+.p5w [data-composition]{justify-content:flex-start;align-items:stretch;padding-top:280px}
+.p5w [data-composition] .dir-title{font-family:Inter,sans-serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-4px;text-wrap:balance;max-width:900px}
+.p5w [data-composition] .dir-note{font-size:40px;line-height:1.25;max-width:760px;text-wrap:pretty}
+.p5w [data-composition] .dir-label{font-size:32px;line-height:1.2}
+.p5w [data-composition] .dir-object{position:relative;flex:none;min-width:0}
+.p5w [data-composition=hero] .dir-title{max-width:780px;font-size:112px}
+.p5w [data-composition=hero] .dir-object{margin-top:105px;margin-left:24px;align-self:flex-start;max-width:780px}
+.p5w [data-composition=hero] .dir-word{font-size:200px;line-height:1.05;letter-spacing:-8px}
+.p5w [data-composition=hero] .dir-note{margin-top:52px;max-width:570px}
+.p5w [data-composition=diagram] .dir-title{max-width:680px}
+.p5w [data-composition=diagram] .dir-object{width:800px;height:830px;align-self:center;margin-top:64px}
+.p5w [data-composition=diagram] .dir-node{position:absolute;width:350px;padding:30px;font-size:42px;line-height:1.2}
+.p5w [data-composition=diagram] .dir-source{left:0;top:40px}
+.p5w [data-composition=diagram] .dir-transform{right:0;top:330px}
+.p5w [data-composition=diagram] .dir-result{left:0;top:650px}
+.p5w [data-composition=interface] .dir-title{max-width:800px}
+.p5w [data-composition=interface] .dir-object{width:800px;align-self:flex-end;margin-top:90px}
+.p5w [data-composition=interface] .dir-note{margin-top:55px;max-width:650px}
+.p5w [data-composition=data] .dir-title{max-width:760px}
+.p5w [data-composition=data] .dir-object{width:800px;margin-top:100px;align-self:center}
+.p5w [data-composition=data] .dir-row{display:grid;grid-template-columns:1fr 220px;align-items:end;margin-bottom:65px;gap:32px;min-height:240px}
+.p5w [data-composition=data] .dir-value{font-size:130px;line-height:1.1;text-align:right}
+.p5w [data-composition=data] .dir-track{grid-column:1/-1;height:52px;border-radius:var(--r-s);background:var(--ring);overflow:hidden}
+.p5w [data-composition=data] .dir-track i{display:block;height:100%;background:var(--acc);border-radius:inherit}
+.p5w [data-composition=data] .dir-note{margin-top:50px}
+.p5w [data-composition=cinematic]{justify-content:center}
+.p5w [data-composition=cinematic] .dir-object{align-self:center;width:800px}
+.p5w [data-composition=cinematic] .dir-title{font-size:130px;line-height:1.05;text-align:left}
+.p5w [data-composition=cinematic] .dir-note{margin-top:80px;border-top:2px solid var(--ring);padding-top:35px}
+
+.p5w [data-composition=interface] .win-bar b{font-size:32px;color:var(--plain-d)}

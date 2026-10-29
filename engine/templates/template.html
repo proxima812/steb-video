@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+</style>
+</head><body class="p5w" data-txt="blur">
+<section class="s black wall pal-sky" data-s="0" data-e="3" style="--wall:url(../../video/wallpapers/7fea174040608cc17b2c12beb632eace.png)">
+  <div class="h2" data-lines="0.1,0.25">Заголовок <span class="acc">акцент</span></div>
+  <div class="gap2"></div>
+  <div class="p" data-wd="0.8,0.15">Обычный текст и <span class="iw"><i class="mi">memory</i> иконка</span></div>
+</section>
+<section class="s white pal-purple" data-s="3" data-e="6" data-tr="dots">
+  <div class="h3" data-lines="3.1,3.25,3.4">Тетрадь: пометка <span class="hand acc">ручкой</span></div>
+  <div class="gap"></div>
+  <div class="code5 mono" data-in="3.8" data-a="rise">x.shape <span class="k">==</span> (<span class="n">2</span>, <span class="n">3</span>)</div>
+</section>
+<!-- концовка: пустая section.outro (последняя, 2.5 с, белый фон, две строки с иконками и крупный аватар снизу) - движок вставит профиль по центру и снизу «Не подписывайся.» -->
+<section class="s white pal-violet outro" data-s="6" data-e="8.5" data-tr="up" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам); p5-motion - роллер data-roll, курсор data-cur, перецентровка data-grow -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="components/p5-ui.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

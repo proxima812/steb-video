@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head><base href="../">
+  <meta charset="utf-8">
+  <title>Three.js - графика и слои</title>
+  <link rel="stylesheet" href="styles/fonts-p5.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/preset-minimal.css">
+  <link rel="stylesheet" href="styles/preset-dynamic.css">
+</head>
+<body>
+<script src="components/p5-blocks.js"></script>
+<script>
+P5Blocks.mount([
+  {
+    type: 'chart3d', theme: 'dark', start: 0, end: 4,
+    title: {text: 'Сравниваем объем работы', times: [.1, .4, .7]},
+    max: 100, unit: '%',
+    bars: [
+      {label: 'Полный запуск', value: 100, at: .9, duration: 1.2},
+      {label: 'Из кеша', value: 18, at: 1.8, duration: 1.2},
+      {label: 'Только звук', value: 32, at: 2.2, duration: 1.2},
+    ],
+    caption: {text: 'Демонстрационные данные на общей шкале', times: [2.8, 3, 3.2, 3.4, 3.6]},
+  },
+  {
+    type: 'layers3d', theme: 'light', start: 4, end: 8,
+    title: {text: 'Разбираем компонент на слои', times: [4.1, 4.4, 4.7, 5]},
+    layers: ['Данные', 'Логика', 'Интерфейс'], at: 5.1, duration: 2.1,
+    caption: {text: 'Каждый слой выполняет свою задачу', times: [6.6, 6.8, 7, 7.2, 7.5]},
+  },
+]);
+</script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+init();
+window.VIDEO_READY = import('./components/p5-three.mjs').then(async ({attachThree}) => {
+  window.P5_THREE = await attachThree();
+  render(0);
+});
+</script>
+</body>
+</html>

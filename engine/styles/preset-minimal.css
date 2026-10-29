@@ -1,0 +1,48 @@
+/* Пресет 4 «Минимал»: чистая Tailwind-типографика без служебной инфографики
+   (без «01 / тема», без шкал прогресса и «шаг N / M»). Подключать после base.css.
+   Акцент ролика задается в его <style>: :root{--accent:var(--indigo-500)} */
+:root{--indigo-300:#a3b3ff;--indigo-400:#7c86ff;--indigo-600:#4f39f6;--sky-300:#77d4ff;--violet-400:#a684ff}
+/* плашка приглушена: видно автора, но не цепляет взгляд */
+.handle{opacity:.35;font-size:28px;top:156px}
+/* ритм фонов: кроме белого (.w) и черного (.b) - теплые и глубокие тона Tailwind.
+   Каждый фон задает свой текст, ring, приглушенный цвет и оттенок акцента (--acc-on), чтобы все сочеталось */
+.s{--acc-on:var(--accent)}
+.b{--acc-on:var(--indigo-400)}
+.sand{background:#f5f5f4;color:#1c1917;--ring:rgba(28,25,23,.1);--mut:#79716b;--acc-on:var(--indigo-600)}      /* stone-100 / stone-900 */
+.cream{background:#fffbeb;color:#1c1917;--ring:rgba(123,51,6,.12);--mut:#79716b;--acc-on:var(--indigo-600)}    /* amber-50 */
+.navy{background:#1e1a4d;color:#eef2ff;--ring:rgba(224,231,255,.14);--mut:#a3b3ff;--acc-on:var(--indigo-300)}   /* indigo-950 / indigo-50 */
+.mist{background:#f1f5f9;color:#0f172b;--ring:rgba(15,23,43,.1);--mut:#62748e;--acc-on:var(--indigo-600)}       /* slate-100 / slate-900 */
+.s .acc{color:var(--acc-on)}
+.navy .card,.navy .pane{background:rgba(255,255,255,.06)}
+.sand .card,.cream .card,.mist .card{background:var(--white)}
+/* заголовок по словам: слово выезжает снизу из неподвижной маски строки */
+.wd .w8{display:inline-block;overflow:hidden;vertical-align:top;padding:.08em 0 .14em;margin:-.08em 0 -.14em}
+.wd .w8i{display:inline-block}
+.wd.wd-blur .w8{overflow:visible}   /* data-txt="blur": без маски, размытие не обрезается */
+/* формула: крупный Google Sans, переменные курсивом */
+.fx{font-size:84px;line-height:1.15;font-weight:500;letter-spacing:-1px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fx i{font-style:italic}.fx sup{font-size:.5em;vertical-align:.95em;margin-left:2px}
+.fx .lim{display:inline-flex;flex-direction:column;align-items:flex-start;font-size:.36em;line-height:1.1;vertical-align:middle;margin:0 10px 0 -6px}
+.int{font-size:1.5em;font-weight:500;vertical-align:-.12em}
+/* стеклянная панель с перспективой */
+.pane{border-radius:40px;padding:48px 52px;background:rgba(255,255,255,.05);
+  box-shadow:0 0 0 2px var(--ring),0 40px 80px -24px rgba(0,0,0,.5);
+  backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);transform-origin:50% 100%}
+.w .pane{background:rgba(255,255,255,.7);box-shadow:0 0 0 2px var(--ring),0 4px 12px rgba(9,9,11,.05),0 40px 80px -24px rgba(9,9,11,.18)}
+/* SVG-линии рисуются: <path data-draw="t0,t1"> */
+.plot path:not(.area){fill:none;stroke-linecap:round;stroke-linejoin:round}
+.h,.h2,.h3{text-wrap:balance}
+/* герой: один элемент поверх сцен, перелетает между якорями <i class="anc" data-anchor=".."> */
+.hero{position:fixed;left:0;top:0;z-index:50;transform-origin:50% 50%;pointer-events:none}
+.anc{visibility:hidden;font-style:normal}
+i.anc:empty{position:absolute;width:0;height:0}
+/* замена значения в маске: две строки в одной ячейке, видна одна */
+[data-p4-swap]{display:inline-grid;overflow:hidden;vertical-align:top}
+[data-p4-swap]>*{grid-area:1/1;justify-self:center}
+/* служебное: замер якорей без трансформаций */
+.p4-measure .s{display:flex!important}
+.p4-measure .s,.p4-measure .s *{transform:none!important;translate:none!important;scale:none!important;rotate:none!important}
+/* мем-фото: <img class="meme" src="imgN/x.jpg" data-in=".." data-a="pop" data-r="-5" style="right:65px;top:960px">
+   звук pop добавляется сам. Внутри safe zone, не перекрывает текст */
+.meme{position:absolute;z-index:2;width:240px;height:240px;border-radius:32px;object-fit:cover;background:var(--white);
+  box-shadow:0 0 0 6px var(--white),0 0 0 8px var(--ring),0 24px 48px -12px rgba(9,9,11,.35)}

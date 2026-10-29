@@ -1,0 +1,62 @@
+/* База для роликов с 8-го. Правила: CLAUDE.md (safe zone, типографика, палитра Tailwind).
+   Старые ролики 1-7 используют shared.css - его не трогаем. */
+:root{
+  /* Tailwind v4 colors (https://tailwindcss.com/docs/colors) */
+  --white:#fff;--black:#000;
+  --zinc-50:#fafafa;--zinc-100:#f4f4f5;--zinc-200:#e4e4e7;--zinc-300:#d4d4d8;--zinc-400:#9f9fa9;--zinc-500:#71717b;--zinc-600:#52525c;--zinc-700:#3f3f46;--zinc-800:#27272a;--zinc-900:#18181b;--zinc-950:#09090b;
+  --orange-400:#ff8904;--orange-500:#ff6900;--orange-600:#f54900;
+  --sky-400:#00bcff;--sky-500:#00a6f4;--indigo-500:#615fff;--violet-500:#8e51ff;--fuchsia-500:#e12afb;--pink-500:#f6339a;
+  --emerald-400:#00d492;--emerald-500:#00bc7d;--red-500:#fb2c36;--amber-400:#ffb900;
+  --accent:var(--orange-500);
+  /* safe zone */
+  --sz-t:250px;--sz-b:250px;--sz-x:65px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+body{font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:-.75px;-webkit-font-smoothing:antialiased}
+/* сцена = safe zone текста: x 65-1015, y 250-1670; остальные компоненты - только x 65-1015 */
+.s{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:var(--sz-t) var(--sz-x) var(--sz-b);overflow:hidden;perspective:1200px}
+.s>*{position:relative;z-index:1}
+.s>.bg{position:absolute;inset:0;z-index:0}           /* фон/свечения - можно за safe zone */
+.w{background:var(--white);color:var(--zinc-950);--ring:rgba(9,9,11,.08);--mut:var(--zinc-500)}
+.b{background:var(--zinc-950);color:var(--zinc-50);--ring:rgba(255,255,255,.1);--mut:var(--zinc-400)}
+/* типографика: 500-700, только отрицательный трекинг */
+.h{font-size:96px;line-height:1.02;font-weight:700;letter-spacing:-1.75px}
+.h2{font-size:72px;line-height:1.05;font-weight:700;letter-spacing:-1.75px}
+.h3{font-size:52px;line-height:1.1;font-weight:500;letter-spacing:-1px}
+.p{font-size:38px;line-height:1.3;font-weight:500;letter-spacing:-.75px}
+.mut{color:var(--mut)}.acc{color:var(--accent)}
+.up{text-transform:uppercase} /* 2-3 раза за ролик, по смыслу */
+.mono{font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:0}
+.eye{font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:0;font-size:26px;color:var(--mut);margin-bottom:28px}
+.eye b{color:var(--accent);font-weight:500}
+/* компоненты: ring, rounded-2xl, мягкие тени */
+.card{border-radius:32px;padding:36px 40px;background:var(--white);box-shadow:0 0 0 2px var(--ring),0 4px 12px rgba(9,9,11,.05),0 24px 48px -12px rgba(9,9,11,.12)}
+.b .card{background:rgba(255,255,255,.04)}
+.glass{border-radius:32px;padding:36px 40px;background:rgba(255,255,255,.08);box-shadow:0 0 0 2px var(--ring);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5)}
+.w .glass{background:rgba(255,255,255,.6)}
+.ct{font-family:'Google Sans',sans-serif;font-size:26px;font-weight:500;letter-spacing:0;color:var(--mut)}
+.code{border-radius:32px;background:var(--zinc-900);color:var(--zinc-200);box-shadow:0 0 0 2px rgba(255,255,255,.1),0 30px 60px -20px rgba(9,9,11,.5);overflow:hidden;font-size:32px;line-height:1.6}
+.code .bar0{display:flex;align-items:center;gap:14px;padding:20px 28px;border-bottom:2px solid rgba(255,255,255,.07)}
+.code .bar0 i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15)}
+.code .tab{margin-left:16px;font-size:24px;border-bottom:3px solid var(--accent);padding-bottom:4px}
+.code .bd{padding:24px 32px}
+.k{color:var(--pink-500)}.f{color:var(--sky-400)}.st{color:var(--emerald-400)}.c{color:var(--zinc-500)}
+.bd2{display:inline-flex;align-items:center;gap:12px;border-radius:999px;padding:12px 26px;font-size:32px;font-weight:500;letter-spacing:-.75px;margin:0 12px 14px 0}
+.gr{background:rgba(113,113,123,.08);color:var(--zinc-600);box-shadow:inset 0 0 0 2px var(--ring)}.b .gr{color:var(--zinc-300)}
+.ac{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.rd{background:rgba(251,44,54,.1);color:var(--red-500);box-shadow:inset 0 0 0 2px rgba(251,44,54,.3)}
+.gn{background:rgba(0,188,125,.1);color:var(--emerald-500);box-shadow:inset 0 0 0 2px rgba(0,188,125,.3)}
+.dot{width:14px;height:14px;border-radius:50%;background:currentColor;display:inline-block}
+.track{height:18px;border-radius:999px;background:rgba(113,113,123,.15);overflow:hidden;margin-top:20px}
+.track>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.stat{display:flex;justify-content:space-between;align-items:flex-end}
+.row{display:flex;flex-wrap:wrap}.gap{height:72px}.gap2{height:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.strike{position:relative}.strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:6px;background:var(--red-500);border-radius:3px;transform-origin:left;transform:scaleX(var(--k,0))}
+/* 3D: perspective/transform-style как в tailwind */
+.p3d{transform-style:preserve-3d}.bfh{backface-visibility:hidden}
+/* плашка (вставляет runtime/engine.js) - в верхней зоне, без положительного трекинга */
+.handle{position:fixed;top:150px;left:var(--sz-x);right:var(--sz-x);display:flex;justify-content:space-between;z-index:100;color:#fff;mix-blend-mode:difference;font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:0;font-size:32px}
+/* проверка: открой страницу с ?safe - покажет рамку safe zone */
+.safe-debug::after{content:"";position:fixed;left:var(--sz-x);right:var(--sz-x);top:var(--sz-t);bottom:var(--sz-b);outline:3px dashed var(--red-500);z-index:999;pointer-events:none}

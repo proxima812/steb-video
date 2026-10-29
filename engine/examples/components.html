@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Набор компонентов пресета default (styles/p5-world.css): одна и та же разметка на .white, .black и .black.wall со стеклом.
+     Тайминги демонстрационные, без озвучки. Смотреть: открыть в браузере и вызвать render(t), сцены по 4 с. -->
+<base href="../">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css">
+<style>.demo{display:flex;flex-direction:column;gap:30px;width:100%}.demo .row2{display:grid;grid-template-columns:1fr 1fr;gap:24px}.demo .line{display:flex;align-items:center;gap:20px;flex-wrap:wrap}</style>
+</head><body class="p5w" data-txt="blur">
+<template id="kit">
+  <div class="demo">
+    <div class="h3">Компоненты</div>
+    <div class="win" data-in="T0.2" data-a="rise">
+      <div class="win-bar"><i></i><i></i><i></i><b>app.local / поиск</b></div>
+      <div class="win-body">
+        <div class="field on"><i class="mi">search</i><span>диван</span><i class="caret"></i></div>
+        <div class="seg"><span class="on">Все</span><span>Мебель</span><span>Софы</span></div>
+      </div>
+    </div>
+    <div class="row2" data-in="T0.5" data-a="rise">
+      <div class="card kpi" style="padding:30px 34px"><div class="num acc">98%</div><div class="kpi-l">запросов без ответа</div></div>
+      <div class="tile on" style="display:flex;flex-direction:column;justify-content:space-between;gap:20px"><span class="tag on"><i class="mi">bolt</i> выбрано</span><b style="font-family:Inter">Плитка .on</b></div>
+    </div>
+    <div class="card" style="padding:12px 34px" data-in="T0.8" data-a="rise">
+      <div class="list">
+        <div class="li"><span class="ib"><i class="mi">database</i></span>Индекс<span class="li-m">12 мс</span></div>
+        <div class="li on"><span class="ib solid"><i class="mi">check</i></span>Кеш<span class="li-m">2 мс</span></div>
+      </div>
+    </div>
+    <div class="tbl" style="--cols:1fr 1fr 160px" data-in="T1.1" data-a="rise">
+      <div class="tr th"><span>запрос</span><span>находит</span><span class="r">ms</span></div>
+      <div class="tr"><span>диван</span><span>диван</span><span class="r">14</span></div>
+      <div class="tr on"><span>диван</span><span>софа</span><span class="r">9</span></div>
+    </div>
+    <div class="toast" data-in="T1.4" data-a="blur"><span class="ib solid"><i class="mi">notifications</i></span><div><b>Сборка готова</b><span>3 файла, 1.2 МБ</span></div><span class="tag">сейчас</span></div>
+    <div class="line" data-in="T1.7" data-a="rise"><span class="btn"><i class="mi">play_arrow</i>Запустить</span><span class="btn soft">Мягкая</span><span class="btn ghost">Контур</span></div>
+    <div class="line p" data-in="T2" data-a="rise"><i class="tog" data-mk="T2.3"></i><i class="chk" data-mk="T2.5"></i><span>нажми <span class="kbd">Ctrl</span> + <span class="kbd">K</span></span></div>
+  </div>
+</template>
+<section class="s white pal-sky" data-s="0" data-e="4"></section>
+<section class="s black pal-orange" data-s="4" data-e="8" data-tr="dots"></section>
+<section class="s black wall pal-violet glassy" data-s="8" data-e="12" data-tr="grow" style="--wall:url(../../video/wallpapers/7fea174040608cc17b2c12beb632eace.png)"></section>
+<section class="s white pal-violet outro" data-s="12" data-e="14.5" data-tr="shrink" data-deco="none" data-ava="none"></section>
+<script>
+// одна разметка во все демо-сцены; на обоях акцентные компоненты получают .glass
+document.querySelectorAll('section:not(.outro)').forEach(s=>{const a=+s.dataset.s;
+  s.innerHTML=document.getElementById('kit').innerHTML.replace(/T([\d.]+)/g,(_,x)=>(a+ +x).toFixed(2));
+  if(s.classList.contains('glassy'))s.querySelectorAll('.win,.toast,.seg,.btn:not(.ghost),.field,.tile').forEach(e=>e.classList.add('glass'));
+  if(s.classList.contains('glassy'))s.querySelector('.tile').classList.add('tint')});
+</script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-lines.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>init();render(0);</script>
+</body></html>

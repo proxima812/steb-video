@@ -1,0 +1,361 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+</style>
+<link rel="stylesheet" href="styles/scene-compositions.css"></head><body class="p5w" data-txt="blur">
+
+<section id="intent" class="s black wall pal-amber" style="--wall:url(../../video/wallpapers/3WPuzddwAIWq.webp)">
+  <div id="hero-title" class="dir-title" data-camera-keep>Красиво.<br>Но зачем?</div>
+  <div class="dir-object"><div id="meaning" class="num acc dir-word">Смысл</div></div>
+  <p id="hero-note" class="p dir-note">Сначала мысль.<br>Потом движение.</p>
+  <img class="ava bl" src="../video/avatar/bl.png" style="--ava-h:480px" alt="">
+</section>
+<section id="flow" class="s white pal-violet" data-wipe="400,800">
+  <div id="flow-title" class="dir-title" data-camera-keep>Покажи путь<br>мысли</div>
+  <div id="flow-stage" class="dir-object" data-safe data-layout-object>
+    <svg viewBox="0 0 800 830" style="position:absolute;inset:0;width:800px;height:830px;fill:none;stroke:var(--acc);stroke-width:6" aria-label="Поток данных">
+      <path id="wire-a" d="M175 200 C175 290 625 210 625 330"/>
+      <path id="wire-b" d="M625 490 C625 600 175 530 175 650"/>
+    </svg>
+    <div id="source" class="dir-node dir-source tile"><i class="mi">input</i><br>Запрос</div>
+    <div id="process" class="dir-node dir-transform tile on"><i class="mi">memory</i><br>Обработка</div>
+    <div id="answer" class="dir-node dir-result tile on">Ответ</div>
+  </div>
+</section>
+<section id="interaction" class="s white pal-blue" data-cur="11.2 750,1000; 11.7 #run click .7; 13.4 hide">
+  <div id="ui-title" class="dir-title" data-camera-keep>Действие.<br>Следствие.</div>
+  <div id="demo-window" class="dir-object win" data-safe data-layout-object>
+    <div class="win-bar"><i></i><i></i><i></i><b>Проверка макета</b></div>
+    <div class="win-body" style="padding:40px;display:flex;flex-direction:column;gap:46px">
+      <div class="field" style="font-size:42px"><i class="mi">description</i>scene.html</div>
+      <button id="run" class="btn" style="font-size:44px;align-self:flex-start">Проверить</button>
+      <div id="result" class="tile on" style="font-size:42px;line-height:1.3;padding:32px"><i class="mi">check_circle</i><br>Текст в кадре.<br>Цель видна.</div>
+    </div>
+  </div>
+  <p class="p dir-note">Результат появляется<br>после действия.</p>
+</section>
+<section id="evidence" class="s black wall pal-teal" style="--wall:url(../../video/wallpapers/9c04778ad052f16661826024b3696ba7.jpg)">
+  <div id="data-title" class="dir-title" data-camera-keep>Разница<br>в масштабе</div>
+  <div id="comparison-data" class="dir-object" data-safe data-layout-object>
+    <div class="dir-row"><div class="p">До<br><span class="dir-label">миллисекунды</span></div><div id="slow-value" class="num dir-value">0</div><div class="dir-track"><i id="slow-bar"></i></div></div>
+    <div class="dir-row"><div class="p acc">После<br><span class="dir-label">миллисекунды</span></div><div id="fast-value" class="num dir-value acc">0</div><div class="dir-track"><i id="fast-bar"></i></div></div>
+  </div>
+  <p class="p dir-note">Одна шкала: 0-120 мс.<br>Учебные данные.</p>
+</section>
+<section id="statement" class="s white pal-grape" data-wipe="540,1100">
+  <div class="dir-object">
+    <div id="final-thought" class="dir-title">Веди взгляд.<br><span class="acc">Объясняй<br>изменение.</span></div>
+    <p id="final-note" class="p dir-note">Смысл → объект → действие</p>
+  </div>
+</section>
+<section class="s white pal-mint outro" data-s="24" data-e="26.5" data-tr="up" data-deco="none" style="--mut:var(--plain-d)"></section>
+<script type="application/json" id="scene-direction">{
+  "version": 1,
+  "timing": "demo",
+  "scenes": [
+    {
+      "id": "intent",
+      "start": 0,
+      "end": 5,
+      "composition": "hero",
+      "focalPoint": "meaning",
+      "concept": "У каждого движения есть причина",
+      "visualMetaphor": "Одно главное слово вместо коллекции эффектов",
+      "transition": {
+        "type": "cut",
+        "reason": "Начало"
+      },
+      "motion": [
+        {
+          "target": "meaning",
+          "pattern": "masked-reveal",
+          "startsAt": 1.3,
+          "duration": 0.8,
+          "purpose": "Назвать критерий выбора движения"
+        },
+        {
+          "target": "hero-note",
+          "pattern": "reveal",
+          "startsAt": 2.6,
+          "duration": 0.8,
+          "purpose": "Связать композицию с мыслью"
+        }
+      ],
+      "camera": [
+        {
+          "target": "meaning",
+          "startsAt": 2.5,
+          "duration": 0.8,
+          "scale": 1.08,
+          "shot": "medium",
+          "purpose": "Выделить смысловой результат"
+        },
+        {
+          "target": "c",
+          "startsAt": 4,
+          "duration": 0.8,
+          "scale": 1,
+          "shot": "wide",
+          "purpose": "Общий план"
+        }
+      ],
+      "cameraFit": "safe",
+      "camdim": 0.65
+    },
+    {
+      "id": "flow",
+      "start": 5,
+      "end": 10,
+      "composition": "diagram",
+      "focalPoint": "flow-stage",
+      "concept": "Движение показывает преобразование",
+      "visualMetaphor": "Сигнал проходит через обработку и становится ответом",
+      "transition": {
+        "type": "radial",
+        "reason": "Смена смыслового плана"
+      },
+      "motion": [
+        {
+          "target": "wire-a",
+          "pattern": "draw",
+          "startsAt": 6,
+          "duration": 0.9,
+          "purpose": "Путь от запроса к обработке"
+        },
+        {
+          "target": "process",
+          "pattern": "reveal",
+          "startsAt": 6.9,
+          "duration": 0.7,
+          "purpose": "Обработка начинается после прихода сигнала"
+        },
+        {
+          "target": "wire-b",
+          "pattern": "draw",
+          "startsAt": 7.6,
+          "duration": 0.8,
+          "purpose": "Путь готового результата"
+        },
+        {
+          "target": "answer",
+          "pattern": "reveal",
+          "startsAt": 8.4,
+          "duration": 0.7,
+          "purpose": "Появление результата после обработки"
+        }
+      ],
+      "camera": [
+        {
+          "target": "flow-stage",
+          "startsAt": 8.5,
+          "duration": 0.8,
+          "scale": 1.08,
+          "shot": "medium",
+          "purpose": "Выделить смысловой результат"
+        },
+        {
+          "target": "c",
+          "startsAt": 9.3,
+          "duration": 0.6,
+          "scale": 1,
+          "shot": "wide",
+          "purpose": "Общий план"
+        }
+      ],
+      "cameraFit": "safe",
+      "camdim": 0.65
+    },
+    {
+      "id": "interaction",
+      "start": 10,
+      "end": 15,
+      "composition": "interface",
+      "focalPoint": "demo-window",
+      "concept": "Действие приводит к изменению интерфейса",
+      "visualMetaphor": "Кнопка запускает обработку; ответ приходит после нее",
+      "transition": {
+        "type": "down",
+        "reason": "Смена смыслового плана"
+      },
+      "motion": [
+        {
+          "target": "result",
+          "pattern": "reveal",
+          "startsAt": 13.1,
+          "duration": 0.8,
+          "purpose": "Показать завершение после нажатия"
+        }
+      ],
+      "camera": [
+        {
+          "target": "demo-window",
+          "startsAt": 12,
+          "duration": 0.8,
+          "scale": 1.08,
+          "shot": "medium",
+          "purpose": "Выделить смысловой результат"
+        },
+        {
+          "target": "c",
+          "startsAt": 14,
+          "duration": 0.8,
+          "scale": 1,
+          "shot": "wide",
+          "purpose": "Общий план"
+        }
+      ],
+      "cameraFit": "safe",
+      "camdim": 0.65
+    },
+    {
+      "id": "evidence",
+      "start": 15,
+      "end": 20,
+      "composition": "data",
+      "focalPoint": "comparison-data",
+      "concept": "Разница заметна на одной шкале",
+      "visualMetaphor": "Два времени одной операции показаны в общем масштабе",
+      "transition": {
+        "type": "defocus",
+        "reason": "Смена смыслового плана"
+      },
+      "motion": [
+        {
+          "target": "slow-bar",
+          "pattern": "width",
+          "startsAt": 16.2,
+          "duration": 1.2,
+          "purpose": "Показать исходную длительность",
+          "from": 0,
+          "to": 100
+        },
+        {
+          "target": "slow-value",
+          "pattern": "number",
+          "startsAt": 16.2,
+          "duration": 1.2,
+          "purpose": "Число согласовано с полосой",
+          "from": 0,
+          "to": 120
+        },
+        {
+          "target": "fast-bar",
+          "pattern": "width",
+          "startsAt": 17.5,
+          "duration": 1.1,
+          "purpose": "Показать меньшую длительность на той же шкале",
+          "from": 0,
+          "to": 33.333333
+        },
+        {
+          "target": "fast-value",
+          "pattern": "number",
+          "startsAt": 17.5,
+          "duration": 1.1,
+          "purpose": "Число согласовано с полосой",
+          "from": 0,
+          "to": 40
+        }
+      ],
+      "camera": [
+        {
+          "target": "comparison-data",
+          "startsAt": 18.6,
+          "duration": 0.8,
+          "scale": 1.08,
+          "shot": "medium",
+          "purpose": "Выделить смысловой результат"
+        },
+        {
+          "target": "c",
+          "startsAt": 19.4,
+          "duration": 0.6,
+          "scale": 1,
+          "shot": "wide",
+          "purpose": "Общий план"
+        }
+      ],
+      "cameraFit": "safe",
+      "camdim": 0.65
+    },
+    {
+      "id": "statement",
+      "start": 20,
+      "end": 24,
+      "composition": "cinematic",
+      "focalPoint": "final-thought",
+      "concept": "Движение направляет внимание",
+      "visualMetaphor": "Статика тезиса после активных сцен",
+      "transition": {
+        "type": "radial",
+        "reason": "Смена смыслового плана"
+      },
+      "motion": [
+        {
+          "target": "final-thought",
+          "pattern": "masked-reveal",
+          "startsAt": 20.2,
+          "duration": 0.8,
+          "purpose": "Сформулировать итог"
+        },
+        {
+          "target": "final-note",
+          "pattern": "reveal",
+          "startsAt": 21.6,
+          "duration": 0.8,
+          "purpose": "Закрепить порядок режиссуры"
+        }
+      ],
+      "camera": [
+        {
+          "target": "final-thought",
+          "startsAt": 22.2,
+          "duration": 0.8,
+          "scale": 1.08,
+          "shot": "medium",
+          "purpose": "Выделить смысловой результат"
+        },
+        {
+          "target": "c",
+          "startsAt": 23.2,
+          "duration": 0.8,
+          "scale": 1,
+          "shot": "wide",
+          "purpose": "Общий план"
+        }
+      ],
+      "cameraFit": "safe",
+      "camdim": 0.65
+    }
+  ]
+}</script>
+<script src="runtime/p5-camera.js"></script>
+<script src="components/p5-direction.js"></script>
+<script>P5Direction.apply(JSON.parse(document.getElementById("scene-direction").textContent));</script>
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="components/p5-ui.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+</body></html>

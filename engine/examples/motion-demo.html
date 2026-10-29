@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru"><head><base href="../"><meta charset="utf-8">
+<title>Роллер, курсор с перетаскиванием, перецентровка группы (runtime/p5-motion.js)</title>
+<!-- Пример мира p5w для runtime/p5-motion.js. Тайминги демонстрационные; в ролике - из words.json.
+     Сцена 1 - хук: слот-роллер data-roll в ячейках. Сцена 2 - курсор переносит чипы в карточки (data-cur ... drag).
+     Сцена 3 (переход whip) - чат из пузырей .bub с входом data-a="blur", группа data-grow держится по центру, курсор жмет кнопку (click).
+     Сцена 4 - дерево: пунктирные связи data-link от узла к карточкам, карточка появляется на конце линии. -->
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<style>
+.p5w .ctr{text-align:center;align-self:center}
+.p5w #hours{font-size:260px;align-self:center}
+.p5w .cloud{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;align-self:center;width:900px}
+.p5w .cols{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.p5w .col{padding:30px;min-height:470px;display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.p5w .col .p{color:var(--mut);font-size:40px}
+.p5w .col .chip,.p5w .cloud .chip{font-size:42px}
+.p5w .send{align-self:flex-end;display:inline-flex;align-items:center;gap:14px;padding:22px 40px;border-radius:999px;font-family:Inter;font-weight:700;font-size:44px;
+  background:var(--pal-bg);color:var(--pal-fg);translate:0 calc(6px*var(--press,0));filter:brightness(calc(1 - .15*var(--hover,0) - .15*var(--press,0)))}
+.p5w .send{background:color-mix(in srgb,var(--card) calc(100%*var(--done,0)),var(--pal-bg));color:color-mix(in srgb,var(--mut) calc(100%*var(--done,0)),var(--pal-fg))}
+.p5w .tree{display:flex;flex-direction:column;align-items:center;gap:110px;align-self:center;width:100%}
+.p5w .node{display:inline-flex;align-items:center;gap:16px;padding:22px 40px;border-radius:999px;font-family:Inter;font-weight:700;font-size:50px;background:var(--pal-bg);color:var(--pal-fg)}
+.p5w .kids{display:flex;gap:30px;justify-content:center;width:100%}
+.p5w .leaf{flex:1;padding:30px;display:flex;flex-direction:column;gap:12px}
+.p5w .leaf .mi{font-size:60px;color:var(--pal-fg)}
+.p5w .leaf b{font-family:Inter;font-weight:700;font-size:44px;letter-spacing:-1px}
+.p5w .leaf span{font-size:34px;color:var(--mut);line-height:1.2}
+.p5w .res{padding:28px 44px;font-family:Inter;font-weight:700;font-size:48px;letter-spacing:-1px}
+</style>
+</head><body class="p5w" data-txt="blur">
+<section class="s black wall pal-shamrock" data-s="0" data-e="3.6" style="--wall:url(../../video/wallpapers/64c0cbe6e3c4d5dff5703a330370102a.jpg)" data-punch="2.4:.02">
+  <div class="h2 ctr" data-lines="0.05,0.25">Я потратил</div>
+  <div class="gap2"></div>
+  <div class="num roll cells glass" id="hours" data-roll="0.1,2.4,3000,1964"></div>
+  <div class="gap2"></div>
+  <div class="p ctr" data-wd="0.9,0.18">часов на вайбкодинг</div>
+</section>
+<section class="s white pal-orange" data-s="3.6" data-e="10" data-tr="dots"
+  data-cur="4.6 #c1 drag #s1 .7; 6.3 #c2 drag #s2 .7; 8 #c3 drag #s3 .7; 9.6 hide">
+  <div class="h2 ctr" data-lines="3.7,3.9">Каждой модели <span class="acc">свое</span></div>
+  <div class="gap2"></div>
+  <div class="cloud" data-in="4" data-a="rise">
+    <span class="chip" id="c1">сайт</span><span class="chip" id="c2">тексты</span><span class="chip">визуал</span><span class="chip" id="c3">автоматизация</span><span class="chip">ролик</span>
+  </div>
+  <div class="gap"></div>
+  <div class="cols">
+    <div class="box col" data-in="4.2" data-a="rise"><div class="p">claude - код</div><span class="chip" id="s1">сайт</span><span class="chip" id="s3">автоматизация</span></div>
+    <div class="box col" data-in="4.35" data-a="rise"><div class="p">codex - тексты</div><span class="chip" id="s2">тексты</span></div>
+  </div>
+</section>
+<section class="s black pal-sky" data-s="10" data-e="15" data-tr="whip" data-cur="12.2 #send; 12.6 #send click .5; 14.4 hide">
+  <div class="h2 ctr" data-lines="10.1,10.3">Пишешь <span class="acc">апелляцию</span></div>
+  <div class="gap"></div>
+  <div class="chat" data-grow="y">
+    <div class="bub me" data-in="10.6" data-a="blur">прошу снять блокировку</div>
+    <div class="bub bot" data-in="11.4" data-a="blur"><span class="bub-who">поддержка</span>обращение принято</div>
+    <div class="bub me" data-in="12" data-a="blur">подписка оплачена, доступ закрыт</div>
+    <div class="send" id="send" data-in="12" data-a="blur">отправить</div>
+    <div class="bub bot" data-in="13.4" data-a="blur"><span class="bub-who">поддержка</span>апелляция отклонена</div>
+  </div>
+</section>
+<section class="s white pal-teal" data-s="15" data-e="21" data-tr="dots" data-camk="19.2 #r1 1.12 1; 20.4 c 1 .6">
+  <div class="h2 ctr" data-lines="15.1,15.3">В <span class="acc">разработке</span></div>
+  <div class="gap"></div>
+  <div class="tree">
+    <div class="node" id="nd" data-in="15.5" data-a="blur"><i class="mi">terminal</i>claude</div>
+    <div class="kids">
+      <div class="box leaf" data-in="16.4" data-a="blur" data-link="#nd"><i class="mi">memory</i><b>контекст</b><span>держит весь проект</span></div>
+      <div class="box leaf" id="l2" data-in="17" data-a="blur" data-link="#nd"><i class="mi">rule</i><b>правила</b><span>точнее по шагам</span></div>
+      <div class="box leaf" data-in="17.6" data-a="blur" data-link="#nd"><i class="mi">alt_route</i><b>варианты</b><span>несколько решений</span></div>
+    </div>
+    <div class="box res glass" id="r1" data-in="18.6" data-a="blur" data-link="#l2">лучше для кода</div>
+  </div>
+</section>
+<script src="runtime/p5-ease.js"></script><script src="node_modules/split-type/umd/index.min.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>init(); render(0);</script>
+</body></html>

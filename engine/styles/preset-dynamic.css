@@ -1,0 +1,78 @@
+/* Пресет default: все анимации пресетов (4 «Минимал», tatarverse, 23, движок) + постоянное спокойное движение.
+   Деловой инженерный стиль: без «милых» объектов. Фоны чистые: без градиентов, свечений и размытых кругов.
+   Декор - только угловые метки safe zone. Плашка @const_proxima / «Не подписывайся.» есть, цвет по теме.
+   Подключение: styles/fonts-p5.css, styles/base.css, styles/preset-minimal.css, preset-dynamic.css. Правила - DESIGN-SYSTEM.md, раздел 5P.
+   Темы сцен - .white / .black с палитрами pal-* (styles/p5-world.css, с ролика 91). */
+:root{
+  /* Tailwind v4 colors */
+  --blue-50:#eff6ff;--blue-100:#dbeafe;--blue-200:#bedbff;--blue-300:#8ec5ff;--blue-400:#51a2ff;--blue-500:#2b7fff;--blue-600:#155dfc;--blue-700:#1447e6;
+  --rose-50:#fff1f2;--rose-100:#ffe4e6;--rose-200:#ffccd3;--rose-300:#ffa1ad;--rose-400:#ff637e;--rose-500:#ff2056;--rose-600:#ec003f;--rose-700:#c70036;--rose-800:#a50036;--rose-950:#4d0218;
+  --indigo-100:#e0e7ff;--indigo-200:#c6d2ff;--indigo-300:#a3b3ff;--indigo-600:#4f39f6;--indigo-700:#432dd7;--indigo-800:#372aac;--indigo-950:#1e1a4d;
+  --sky-200:#b8e6fe;--sky-300:#77d4ff;--violet-300:#c4b4ff;--red-400:#ff6467;--orange-500:#ff6900;
+}
+body{font-family:'Google Sans',sans-serif;font-weight:400;letter-spacing:-.5px}
+/* плашка: без mix-blend-mode, цвет по теме активной сцены (body[data-th] ставит runtime/preset-dynamic.js) */
+.handle{mix-blend-mode:normal;opacity:.85;font-size:30px;top:150px;color:var(--zinc-50)}
+
+.s{--acc-on:var(--acc);--fg2:var(--mut)}
+.s .acc{color:var(--acc)}.s .acc2{color:var(--acc2)}.s .mut{color:var(--mut)}
+/* градиентный текст - только в одном тоне (как у vercel: белый -> серый), без радуги */
+.gt,.gt .w8i,.gt .ch{background-image:var(--gt);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.gt:has(.w8i),.gt:has(.ch){background-image:none}
+
+/* ===== типографика: Inter - заголовки, Google Sans - текст ===== */
+.h{font-family:Inter;font-size:108px;line-height:1.02;font-weight:800;letter-spacing:-1.75px}
+.h2{font-family:Inter;font-size:80px;line-height:1.05;font-weight:800;letter-spacing:-1.75px}
+.h3{font-family:Inter;font-size:60px;line-height:1.12;font-weight:500;letter-spacing:-1px}
+.p{font-family:'Google Sans';font-size:46px;line-height:1.28;font-weight:400;letter-spacing:-.75px}
+.lt{font-weight:300}.md{font-weight:500}.bd{font-weight:700}.xb{font-weight:800}
+/* акцентные классы: .dela - удар (Inter), .bals и .bell - шутка и подпись (Google Sans) */
+.dela{font-family:Inter;font-weight:400;letter-spacing:-1px}
+.bals{font-family:'Google Sans';font-weight:700;letter-spacing:-.75px}
+.bell{font-family:'Google Sans';font-weight:700;letter-spacing:-.75px}
+.giant{font-size:200px;line-height:.95;letter-spacing:-1.75px}
+.mono{font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:0}
+
+/* ===== иконки Material Symbols Rounded (filled) =====
+   <i class="mi">pets</i> - иконка внутри текста; в data-wd иконка выскакивает вместе с соседним словом.
+   [слово + иконка]: <span class="iw">кот <i class="mi">pets</i></span>; [иконка + слово]: <span class="iw"><i class="mi">pets</i> кот</span>
+   .ib - иконка в цветной плитке (как эмодзи-стикер amie.so) */
+.mi{font-family:'Material Symbols Rounded';font-style:normal;font-weight:400;font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 48;
+  line-height:1;letter-spacing:0;text-transform:none;white-space:nowrap;display:inline-block;font-size:1em;vertical-align:-.14em;color:var(--acc);-webkit-font-feature-settings:'liga';font-feature-settings:'liga'}
+.mi[data-i]::before{content:attr(data-i)}
+.iw{display:inline-flex;align-items:center;gap:.22em;white-space:nowrap}
+.ib{display:inline-grid;place-items:center;width:1.25em;height:1.25em;border-radius:.34em;background:color-mix(in srgb,var(--acc) 16%,transparent);
+  box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--acc) 28%,transparent);vertical-align:-.2em}
+.ib>.mi{font-size:.82em;vertical-align:0}
+.ib.solid{background:var(--acc);box-shadow:0 10px 24px -8px color-mix(in srgb,var(--acc) 60%,transparent)}
+.ib.solid>.mi{color:var(--on)}
+.ib2{--acc:var(--acc2)}
+
+/* ===== компоненты ===== */
+.card{background:var(--card);box-shadow:0 0 0 2px var(--ring),0 4px 12px rgba(9,9,11,.05),0 30px 60px -20px rgba(9,9,11,.25)}
+.chip{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:14px 30px;font-size:38px;font-weight:500;letter-spacing:-.75px;background:var(--chip);box-shadow:inset 0 0 0 2px var(--ring)}
+.chip.on{background:var(--acc);color:var(--on);box-shadow:none}
+.cell{display:grid;place-items:center;border-radius:22px;font-family:'Google Sans',sans-serif;font-weight:500;letter-spacing:0;background:var(--tile);box-shadow:inset 0 0 0 2px var(--ring)}
+.cell.on{background:var(--acc);color:var(--on);box-shadow:none}
+.stack3d{transform-style:preserve-3d}
+/* маркер: <span class="mk" data-mk="t">слово</span> - заливка проезжает под словом */
+.mk{background:linear-gradient(color-mix(in srgb,var(--acc) 38%,transparent),color-mix(in srgb,var(--acc) 38%,transparent)) no-repeat 0 82%/calc(var(--k,0)*100%) 38%;border-radius:8px}
+/* shimmer (из tatarverse): блик едет по тексту, позицию задает время */
+.shim{background:linear-gradient(100deg,currentColor 0 42%,var(--sh,var(--white)) 50%,currentColor 58% 100%);background-size:260% 100%;background-position:calc(var(--sp,0)*1%) 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* бегущая строка: <div class="marq" data-marq="скорость px/с"><div>...</div></div> */
+.marq{overflow:hidden;white-space:nowrap;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marq>div{display:inline-flex;gap:18px}
+/* буквы по одной: data-chars="t0,шаг" */
+.ch{display:inline-block;white-space:pre}
+.code5{border-radius:28px;padding:30px 36px;font-size:40px;line-height:1.45;background:var(--zinc-950);color:var(--zinc-100);box-shadow:0 0 0 2px var(--ring),0 30px 60px -20px rgba(0,0,0,.5)}
+/* подсветка кода в одном холодном ряду */
+.code5 .k{color:var(--violet-300)}.code5 .n{color:var(--sky-300)}.code5 .c{color:var(--zinc-500)}.code5 .f{color:var(--blue-300)}
+
+/* ===== декор (автоматически, за safe zone можно) ===== */
+.p5-deco{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+/* угловые метки safe zone, как на чертеже */
+.p5-deco .cm{position:absolute;width:34px;height:34px;border:0 solid var(--ring);border-width:3px 0 0 3px}
+
+
+/* Inter с отрицательным трекингом: чуть шире пробел между словами */
+.h,.h2,.h3,.p{word-spacing:.06em}

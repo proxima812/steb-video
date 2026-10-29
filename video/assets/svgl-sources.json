@@ -1,0 +1,65 @@
+{
+  "library": "https://svgl.app",
+  "icons": [
+    {
+      "technology": "javascript",
+      "file": "video/assets/images/icon-javascript-fallback.svg",
+      "source": "https://svgl.app/library/javascript.svg",
+      "sha256": "35328c60cffee71518294d614325fad52f903b48b5b63ac5f59fe1997249942c"
+    },
+    {
+      "technology": "typescript",
+      "file": "video/assets/images/icon-typescript-fallback.svg",
+      "source": "https://svgl.app/library/typescript.svg",
+      "sha256": "a72e88ebd02b5e28708e7dfb3ca09c5bc524482f3d0b6a3df3053ed5d51a5f6b"
+    },
+    {
+      "technology": "python",
+      "file": "video/assets/images/icon-python-fallback.svg",
+      "source": "https://svgl.app/library/python.svg",
+      "sha256": "e4d80b4ca9418d1ebb4ff880eb7cbe6896d60d61d9f44ead6723db29a4ed962e"
+    },
+    {
+      "technology": "react",
+      "file": "video/assets/images/icon-react-fallback.svg",
+      "source": "https://svgl.app/library/react_light.svg",
+      "sha256": "0e3b3b606248d4868b5f0c63c30f27929e94724591e28cbd6852ccb649857998"
+    },
+    {
+      "technology": "nodejs",
+      "file": "video/assets/images/icon-nodejs-fallback.svg",
+      "source": "https://svgl.app/library/nodejs.svg",
+      "sha256": "6cd865951598a8a16dd3d588bd93c9d96b3b415a7162d6a1cf63089a2769ed0f"
+    },
+    {
+      "technology": "html",
+      "file": "video/assets/images/icon-html-fallback.svg",
+      "source": "https://svgl.app/library/html5.svg",
+      "sha256": "8c4d77863a0a21b9b451a6da54176025954485a1f0842eb2627c3c52a5041bf2"
+    },
+    {
+      "technology": "css",
+      "file": "video/assets/images/icon-css-fallback.svg",
+      "source": "https://svgl.app/library/css_old.svg",
+      "sha256": "38b506b8c8ec918edde57d6b052f5898a3fd5536a25d4756407596f0bcdd229e"
+    },
+    {
+      "technology": "docker",
+      "file": "video/assets/images/icon-docker-fallback.svg",
+      "source": "https://svgl.app/library/docker.svg",
+      "sha256": "29e91bf0593f02cf32efc849f2e9707dfddd4684b4d72b2a2b6a89da9626c60d"
+    },
+    {
+      "technology": "git",
+      "file": "video/assets/images/icon-git-fallback.svg",
+      "source": "https://svgl.app/library/git.svg",
+      "sha256": "cc43d5b0c4fae45b6e0857c17d602c0efb8526241ca9623a29863867a8f59f3a"
+    },
+    {
+      "technology": "postgresql",
+      "file": "video/assets/images/icon-postgresql-fallback.svg",
+      "source": "https://svgl.app/library/postgresql.svg",
+      "sha256": "dc6bb4376a5cf235b19a8871f3219c2b98d97e4469309c8bbecb86ff1811f506"
+    }
+  ]
+}

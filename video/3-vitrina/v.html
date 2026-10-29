@@ -1,0 +1,158 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+/* ролик 3 (витрина движка): верстка в духе Apple - двухтоновый заголовок, единый ритм отступов, просторные карточки, список как в настройках iOS.
+   Только свои классы z-*, цвета - переменные p5-world.css. */
+.p5w .s.z{gap:64px}
+.p5w .s.z.ztop{justify-content:flex-start;padding-top:290px}
+.p5w .zw{width:860px;align-self:flex-start}
+.p5w .zt{display:flex;flex-direction:column;gap:6px}
+.p5w .zt .h{font-size:124px;line-height:1.02;letter-spacing:-5px}
+.p5w .zt .m{color:var(--mut)}
+.p5w .zc{border-radius:20px;padding:56px 60px;display:flex;flex-direction:column;gap:22px}
+.p5w .zc:not(.glass){box-shadow:0 0 0 2px var(--ring),0 40px 80px -40px var(--glass-shadow)}
+.p5w .ze{display:flex;align-items:center;gap:14px;font-size:40px;line-height:1.1;font-weight:500;letter-spacing:-.5px;color:var(--mut)}
+.p5w .ze .mi{font-size:46px}
+.p5w .zd{height:2px;background:var(--ring);margin:6px 0}
+.p5w .zn{line-height:.9;padding-bottom:.08em}
+.p5w .zcap{font-size:48px;line-height:1.2;font-weight:500;letter-spacing:-1px}
+.p5w .zl{padding:12px 48px}
+.p5w .zr{display:flex;align-items:center;gap:32px;padding:30px 0;font-family:Inter;font-weight:600;font-size:58px;letter-spacing:-2px}
+.p5w .zr+.zr{box-shadow:0 -2px 0 var(--ring)}
+.p5w .zr .lab{flex:1}
+.p5w .zi{flex:none;width:104px;height:104px;border-radius:20px;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
+.p5w .zi .mi,.p5w .zs .mi{color:inherit}
+.p5w .zi .mi{font-size:60px}
+.p5w .zr .end{font-size:56px;color:var(--mut)}
+.p5w .zr.on .zi{background:var(--acc);color:var(--on)}.p5w .zr.on .lab{color:var(--acc)}
+.p5w .zg{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.p5w .zs{border-radius:20px;padding:64px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px;background:var(--card);box-shadow:0 0 0 2px var(--ring);font-family:Inter;font-weight:700;font-size:48px;letter-spacing:-1.5px}
+.p5w .zs .mi{font-size:96px}.p5w .zs{--ic:var(--acc)}.p5w .zs>.mi{color:var(--acc)}
+.p5w .zs.on{background:var(--acc);color:var(--on);box-shadow:none}.p5w .zs.on>.mi{color:var(--on)}
+.p5w .zx{display:flex;flex-direction:column;gap:20px}
+.p5w .zx{gap:24px}
+.p5w .zst{display:grid;grid-template-columns:repeat(3,1fr)}
+.p5w .zst>div+div{padding-left:36px;box-shadow:inset 2px 0 0 var(--ring)}
+.p5w .zst>div:not(:last-child){padding-right:20px}
+.p5w .zt.sm .h{font-size:116px;letter-spacing:-4.5px}
+.p5w .zwall{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.p5w .zwall>div{height:384px;border-radius:20px;background:center/cover no-repeat;box-shadow:0 0 0 2px var(--ring)}
+.p5w .zpal{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.p5w .zpal>div{height:166px;border-radius:20px;background:var(--pal-bg);color:var(--pal-fg);padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between}
+.p5w .zpal b{font-family:Inter;font-weight:800;font-size:72px;line-height:1;letter-spacing:-3px}
+.p5w .zpal span{font-size:30px;font-weight:500;letter-spacing:-.5px}
+.p5w .zty{padding:8px 48px}
+.p5w .zty .zr{display:block;padding:30px 0}
+.p5w .zty .meta{display:block;margin-top:12px;font-family:'Google Sans';font-weight:400;font-size:30px;letter-spacing:-.5px;color:var(--mut)}
+.p5w .z2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.p5w .zrow{display:flex;flex-wrap:wrap;align-items:center;gap:20px}
+.p5w .zrow .chip{font-size:46px;padding:20px 38px}
+.p5w .zava{border-radius:20px;background:var(--pal-bg);height:600px;position:relative;overflow:hidden}
+.p5w .zava img{position:absolute;left:50%;bottom:0;translate:-50% 0;height:86%;width:auto}
+.p5w .zava .ze{position:absolute;left:32px;top:28px;color:var(--acc)}
+.p5w .zmem{display:grid;grid-template-columns:repeat(3,250px);gap:40px;justify-content:space-between}
+.p5w .zmem img{width:250px;height:250px;object-fit:cover}
+.p5w .ztr{padding:4px 40px}
+.p5w .ztr .zr{padding:12px 0;font-size:44px;gap:26px}
+.p5w .ztr .zi{width:76px;height:76px}.p5w .ztr .zi .mi{font-size:44px}
+.p5w .ztr .end{font-family:'Google Sans';font-weight:400;font-size:30px;letter-spacing:-.5px}
+.p5w .zcode{font-size:42px;line-height:1.5;padding:36px 40px;white-space:pre}
+.p5w .tex{font-size:56px;color:var(--acc)}
+</style>
+</head><body class="p5w" data-txt="blur">
+<section class="s z ztop pal-violet black wall" data-s="0" data-e="4.2" data-camk="2.3 #hk 1.06 0.8; 3.4 c 1 0.7" data-punch="2.4" style="--wall:url(&quot;../../video/wallpapers/9c04778ad052f16661826024b3696ba7.jpg&quot;)">
+  <div class="zt"><div class="h">Все, что есть</div><div class="h acc" data-in="0.3" data-a="rise">в нашем движке</div></div>
+  <div class="card glass zc box zw" id="hk"><div class="zst">
+    <div><div class="num acc zn" style="font-size:190px">8</div><div class="p zcap" style="color:var(--mut)">обоев</div></div>
+    <div data-in="0.9" data-a="rise"><div class="num acc zn" style="font-size:190px">20</div><div class="p zcap" style="color:var(--mut)">палитр</div></div>
+    <div data-in="1.5" data-a="rise"><div class="num acc zn" style="font-size:190px">9</div><div class="p zcap" style="color:var(--mut)">переходов</div></div>
+  </div></div>
+  <img class="ava mid" src="../video/avatar/mid.png" alt="" style="--ava-h:500px">
+</section>
+<section class="s z pal-sky black wall" data-s="4.2" data-e="8.6" data-tr="down" data-camk="6.6 #w2 1.15 0.9; 7.7 c 1 0.6" style="--wall:url(&quot;../../video/wallpapers/7fea174040608cc17b2c12beb632eace.png&quot;)">
+  <div class="zx"><div class="ze" data-in="4.5" data-a="rise"><i class="mi">swap_vert</i> переход down</div><div class="zt "><div class="h" data-in="4.6" data-a="rise">Обои</div><div class="h m" data-in="4.9" data-a="rise">8 фонов</div></div></div>
+  <div class="zwall"><div class="box" id="w0" style="background-image:url(&quot;../video/wallpapers/9c04778ad052f16661826024b3696ba7.jpg&quot;)" data-in="4.90" data-a="rise"></div><div class="box" id="w1" style="background-image:url(&quot;../video/wallpapers/7fea174040608cc17b2c12beb632eace.png&quot;)" data-in="5.05" data-a="rise"></div><div class="box" id="w2" style="background-image:url(&quot;../video/wallpapers/9bacc59179f3405ae0d7a1afe6dfe137.jpg&quot;)" data-in="5.20" data-a="rise"></div><div class="box" id="w3" style="background-image:url(&quot;../video/wallpapers/3WPuzddwAIWq.webp&quot;)" data-in="5.35" data-a="rise"></div><div class="box" id="w4" style="background-image:url(&quot;../video/wallpapers/i (1).webp&quot;)" data-in="5.50" data-a="rise"></div><div class="box" id="w5" style="background-image:url(&quot;../video/wallpapers/i (2).webp&quot;)" data-in="5.65" data-a="rise"></div><div class="box" id="w6" style="background-image:url(&quot;../video/wallpapers/a33b17aa263614fcd0b3d555cd4bbcd8.jpg&quot;)" data-in="5.80" data-a="rise"></div><div class="box" id="w7" style="background-image:url(&quot;../video/wallpapers/64c0cbe6e3c4d5dff5703a330370102a.jpg&quot;)" data-in="5.95" data-a="rise"></div></div>
+</section>
+<section class="s z pal-orange white" data-s="8.6" data-e="13" data-tr="dots" data-camk="11.3 #zp 1.15 0.9; 12.2 c 1 0.6">
+  <div class="zx"><div class="ze" data-in="8.9" data-a="rise"><i class="mi">blur_on</i> переход dots</div><div class="zt "><div class="h" data-in="9" data-a="rise">Палитры</div><div class="h m" data-in="9.3" data-a="rise">20 акцентов</div></div></div>
+  <div class="zpal"><div class="box pal-purple" data-in="9.20" data-a="rise"><b>Aa</b><span>purple</span></div><div class="box pal-pink" data-in="9.28" data-a="rise"><b>Aa</b><span>pink</span></div><div class="box pal-cherry" data-in="9.36" data-a="rise"><b>Aa</b><span>cherry</span></div><div class="box pal-red" data-in="9.44" data-a="rise"><b>Aa</b><span>red</span></div><div class="box pal-vermilion" data-in="9.52" data-a="rise"><b>Aa</b><span>vermilion</span></div><div class="box pal-orange" id=zp data-in="9.60" data-a="rise"><b>Aa</b><span>orange</span></div><div class="box pal-amber" data-in="9.68" data-a="rise"><b>Aa</b><span>amber</span></div><div class="box pal-yellow" data-in="9.76" data-a="rise"><b>Aa</b><span>yellow</span></div><div class="box pal-lime" data-in="9.84" data-a="rise"><b>Aa</b><span>lime</span></div><div class="box pal-shamrock" data-in="9.92" data-a="rise"><b>Aa</b><span>shamrock</span></div><div class="box pal-green" data-in="10.00" data-a="rise"><b>Aa</b><span>green</span></div><div class="box pal-teal" data-in="10.08" data-a="rise"><b>Aa</b><span>teal</span></div><div class="box pal-mint" data-in="10.16" data-a="rise"><b>Aa</b><span>mint</span></div><div class="box pal-turquoise" data-in="10.24" data-a="rise"><b>Aa</b><span>turquoise</span></div><div class="box pal-sky" data-in="10.32" data-a="rise"><b>Aa</b><span>sky</span></div><div class="box pal-blue" data-in="10.40" data-a="rise"><b>Aa</b><span>blue</span></div><div class="box pal-indigo" data-in="10.48" data-a="rise"><b>Aa</b><span>indigo</span></div><div class="box pal-sapphire" data-in="10.56" data-a="rise"><b>Aa</b><span>sapphire</span></div><div class="box pal-violet" data-in="10.64" data-a="rise"><b>Aa</b><span>violet</span></div><div class="box pal-grape" data-in="10.72" data-a="rise"><b>Aa</b><span>grape</span></div></div>
+</section>
+<section class="s z pal-green white" data-s="13" data-e="17.2" data-tr="dissolve" data-camk="15.2 #tnum 1.08 0.9; 16.3 c 1 0.6">
+  <div class="zx"><div class="ze" data-in="13.4" data-a="rise"><i class="mi">gradient</i> переход dissolve</div><div class="zt "><div class="h" data-in="13.5" data-a="rise">Шрифты</div><div class="h m" data-in="13.8" data-a="rise">два шрифта</div></div></div>
+  <div class="card zc zty box zw" data-in="14" data-a="rise">
+    <div class="zr" data-in="14.2" data-a="rise"><div class="h" style="font-size:96px">Заголовок</div><span class="meta">.h - Inter 800</span></div>
+    <div class="zr" data-in="14.5" data-a="rise"><div class="h3">Подзаголовок</div><span class="meta">.h3 - Inter 700</span></div>
+    <div class="zr" data-in="14.8" data-a="rise"><div class="p">Текст и <span class="mark">подсветка</span></div><span class="meta">.p - Google Sans 500, .mark</span></div>
+    <div class="zr" id="tnum" data-in="15.1" data-a="rise"><div class="num acc zn" style="font-size:200px">1 024</div><span class="meta">.num - огромные числа</span></div>
+  </div>
+</section>
+<section class="s z pal-pink black wall" data-s="17.2" data-e="21.6" data-tr="radial" data-wipe="540,960" data-camk="19.2 #cg 1.15 0.9; 20.4 c 1 0.6" data-punch="19.3" style="--wall:url(&quot;../../video/wallpapers/9bacc59179f3405ae0d7a1afe6dfe137.jpg&quot;)">
+  <div class="zx"><div class="ze" data-in="17.6" data-a="rise"><i class="mi">radio_button_checked</i> переход radial</div><div class="zt "><div class="h" data-in="17.7" data-a="rise">Компоненты</div><div class="h m" data-in="18.0" data-a="rise">и стекло</div></div></div>
+  <div class="z2">
+    <div class="card zc box" data-in="18.2" data-a="rise"><div class="ze">.card</div><div class="h3">Обычная</div><div class="p zcap" style="color:var(--mut)">весь фон</div></div>
+    <div class="card glass zc box" id="cg" data-in="18.5" data-a="rise"><div class="ze">.glass</div><div class="h3 acc">Акцент</div><div class="p zcap" style="color:var(--mut)">один на сцену</div></div>
+  </div>
+  <div class="zrow"><div class="chip" data-in="18.9" data-a="rise">.chip</div><div class="chip on" data-in="19.1" data-a="rise">.chip.on</div><div class="chip glass" data-in="19.3" data-a="rise">.chip.glass</div></div>
+  <div class="zrow"><div class="stampx" style="font-size:56px" data-in="19.7" data-a="stamp">штамп</div><span class="ib" style="font-size:80px" data-in="20" data-a="rise"><i class="mi">memory</i></span><span class="ib solid" style="font-size:80px" data-in="20.2" data-a="rise"><i class="mi">bolt</i></span><div class="p" data-in="20.4" data-a="rise"><span class="iw"><i class="mi">terminal</i> иконки</span></div></div>
+</section>
+<section class="s z pal-lime black wall" data-s="21.6" data-e="26" data-tr="defocus" data-camk="23.9 #plotc 1.1 0.9; 25 c 1 0.6" style="--wall:url(&quot;../../video/wallpapers/3WPuzddwAIWq.webp&quot;)">
+  <div class="zx"><div class="ze" data-in="22" data-a="rise"><i class="mi">lens_blur</i> переход defocus</div><div class="zt "><div class="h" data-in="22.1" data-a="rise">Код и графики</div><div class="h m" data-in="22.4" data-a="rise">и LaTeX</div></div></div>
+  <div class="z2">
+    <div class="code5 zcode" data-in="22.6" data-a="rise"><span class="k">const</span> y =
+    <span class="f">sigma</span>(<span class="n">x</span>)
+<span class="k">return</span> y
+<span class="c">// .code5</span></div>
+    <div class="card zc box" style="justify-content:center" data-in="22.9" data-a="rise"><div class="ze">LaTeX</div><div class="tex" id="fx"><!--tex \sigma(x)=\frac{1}{1+e^{-x}}--><svg aria-hidden="true" style="vertical-align: -1.738ex;" xmlns="http://www.w3.org/2000/svg" width="15.657ex" height="4.774ex" role="img" focusable="false" viewBox="0 -1342 6920.6 2110"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D70E" d="M184 -11Q116 -11 74 34T31 147Q31 247 104 333T274 430Q275 431 414 431H552Q553 430 555 429T559 427T562 425T565 422T567 420T569 416T570 412T571 407T572 401Q572 357 507 357Q500 357 490 357T476 358H416L421 348Q439 310 439 263Q439 153 359 71T184 -11ZM361 278Q361 358 276 358Q152 358 115 184Q114 180 114 178Q106 141 106 117Q106 67 131 47T188 26Q242 26 287 73Q316 103 334 153T356 233T361 278Z"></path></g><g data-mml-node="mo" transform="translate(571,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(960,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(1532,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(2198.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mfrac" transform="translate(3254.6,0)"><g data-mml-node="mn" transform="translate(1583,676)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mrow" transform="translate(220,-686)"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mo" transform="translate(722.2,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="msup" transform="translate(1722.4,0)"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="TeXAtom" transform="translate(499,289) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mi" transform="translate(778,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g></g></g></g><rect width="3426" height="60" x="120" y="220"></rect></g></g></g></svg><!--/tex--></div></div>
+  </div>
+  <div class="card zc box zw" id="plotc" data-in="23.2" data-a="rise"><div class="ze">D3 - P5D3.plot</div><svg id="plot" viewBox="0 0 740 360" style="width:740px;height:360px"></svg></div>
+</section>
+<section class="s z pal-indigo white" data-s="26" data-e="30.2" data-tr="grow" data-camk="27.9 #avm 1.1 0.9; 29.2 c 1 0.6">
+  <div class="zx"><div class="ze" data-in="26.4" data-a="rise"><i class="mi">open_in_full</i> переход grow</div><div class="zt "><div class="h" data-in="26.5" data-a="rise">Аватары</div><div class="h m" data-in="26.8" data-a="rise">ведущий</div></div></div>
+  <div class="z2">
+    <div class="zava box" data-in="27" data-a="rise"><div class="ze">bl - очки</div><img src="../video/avatar/bl.png" alt="" style="height:70%"></div>
+    <div class="zava box" id="avm" data-in="27.3" data-a="rise"><div class="ze">mid - костюм</div><img src="../video/avatar/mid.png" alt=""></div>
+  </div>
+  <div class="zrow"><div class="chip" data-in="28.4" data-a="rise">bl</div><div class="chip" data-in="28.6" data-a="rise">br</div><div class="chip" data-in="28.8" data-a="rise">mid</div><div class="chip" data-in="29" data-a="rise">low</div><div class="chip on" data-in="29.2" data-a="rise">ring</div></div>
+</section>
+<section class="s z pal-cherry white" data-s="30.2" data-e="34.4" data-tr="up" data-camk="32.4 #meme 1.15 0.9; 33.4 c 1 0.5">
+  <div class="zx"><div class="ze" data-in="30.5" data-a="rise"><i class="mi">swap_vert</i> переход up</div><div class="zt "><div class="h" data-in="30.6" data-a="rise">Мемы</div><div class="h m" data-in="30.9" data-a="rise">картинки .pic</div></div></div>
+  <div class="zmem"><img class="pic" src="../video/3-vitrina/img/04-shrek-side-eye.jpg" alt="" data-in="30.90" data-a="rise"><img class="pic" src="../video/3-vitrina/img/06-cat-cucumber.jpg" alt="" data-in="31.02" data-a="rise"><img class="pic" src="../video/3-vitrina/img/07-official-blue-jacket-smile.jpg" alt="" data-in="31.14" data-a="rise"><img class="pic" src="../video/3-vitrina/img/09-crying-blob-tongue.jpg" alt="" data-in="31.26" data-a="rise"><img class="pic" id=meme src="../video/3-vitrina/img/12-chimp-webcam.jpg" alt="" data-in="31.38" data-a="rise"><img class="pic" src="../video/3-vitrina/img/18-pepper-face.webp" alt="" data-in="31.50" data-a="rise"><img class="pic" src="../video/3-vitrina/img/21-red-cap-champion-bottle.jpeg" alt="" data-in="31.62" data-a="rise"><img class="pic" src="../video/3-vitrina/img/22-dancing-cat.jpeg" alt="" data-in="31.74" data-a="rise"><img class="pic" src="../video/3-vitrina/img/23-old-man-distorted-face.jpeg" alt="" data-in="31.86" data-a="rise"></div>
+</section>
+<section class="s z pal-amber black wall" data-s="34.4" data-e="38.8" data-tr="meme" data-wipe="#meme" data-camk="37 #trm 1.1 0.9; 38 c 1 0.5" data-punch="37.1" style="--wall:url(&quot;../../video/wallpapers/i (1).webp&quot;)">
+  <div class="zx"><div class="ze" data-in="35.7" data-a="rise"><i class="mi">image</i> переход meme</div><div class="zt sm"><div class="h" data-in="35.7" data-a="rise">Переходы</div><div class="h m" data-in="35.9" data-a="rise">9 способов</div></div></div>
+  <div class="card zc ztr box zw" id="trl" data-in="35.8" data-a="rise"><div class="zr" data-in="36.00" data-a="rise"><span class="zi"><i class="mi">swap_vert</i></span><span class="lab">down / up</span><span class="end">тот же фон, 1 с</span></div><div class="zr" data-in="36.15" data-a="rise"><span class="zi"><i class="mi">blur_on</i></span><span class="lab">dots</span><span class="end">смена фона, 0.7 с</span></div><div class="zr" data-in="36.30" data-a="rise"><span class="zi"><i class="mi">radio_button_checked</i></span><span class="lab">radial</span><span class="end">круг из точки</span></div><div class="zr" data-in="36.45" data-a="rise"><span class="zi"><i class="mi">open_in_full</i></span><span class="lab">grow</span><span class="end">сцена растет</span></div><div class="zr" data-in="36.60" data-a="rise"><span class="zi"><i class="mi">close_fullscreen</i></span><span class="lab">shrink</span><span class="end">сцена сжимается</span></div><div class="zr" data-in="36.75" data-a="rise"><span class="zi"><i class="mi">gradient</i></span><span class="lab">dissolve</span><span class="end">растворение</span></div><div class="zr" data-in="36.90" data-a="rise"><span class="zi"><i class="mi">lens_blur</i></span><span class="lab">defocus</span><span class="end">расфокус, 1 с</span></div><div class="zr on" id="trm" data-in="37.05" data-a="rise"><span class="zi"><i class="mi">image</i></span><span class="lab">meme</span><span class="end">зум в мем, 1.2 с</span></div><div class="zr" data-in="37.20" data-a="rise"><span class="zi"><i class="mi">logout</i></span><span class="lab">data-exit</span><span class="end">мягкий уход</span></div></div>
+</section>
+<section class="s white pal-violet outro" data-s="38.8" data-e="41.3" data-tr="shrink" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам) -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-d3.js"></script>
+<script>
+{const svg=document.getElementById('plot'),P=P5D3.plot(svg,{x:[-6,6],y:[-.1,1.1],pad:[20,20,56,70]}),f=x=>1/(1+Math.exp(-x));
+ svg.innerHTML=P.axes({xt:[-6,-3,0,3,6],yt:[0,.5,1],xl:''})+'<path d="'+P.fn(f)+'" fill="none" stroke="var(--acc)" stroke-width="8" stroke-linecap="round" data-draw="23.5,24.9"/>'}
+</script>
+
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+.p5w .s .h2{font-size:120px;line-height:1.02}
+.p5w .s .p{font-size:52px}
+.p5w .s .huge{font-size:170px;line-height:1;letter-spacing:-6px}
+.p5w .s .term{font-size:200px;line-height:1;letter-spacing:-6px}
+.p5w .s .bub{font-size:52px}
+.chips{display:flex;gap:24px;flex-wrap:wrap}
+.fit{align-self:flex-start;width:fit-content}
+.chips .chip{font-size:56px;padding:22px 40px}
+.lnbox{width:850px;height:560px;padding:0;position:relative}
+.lnbox svg{position:absolute;inset:0;width:100%;height:100%}
+.lnbox .grid{stroke:var(--ring);stroke-width:2;fill:none}
+.lnbox #lnp{stroke:var(--pal-bg);stroke-width:14;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.p5w .s .tbl{width:820px;font-size:48px}
+.p5w .s .li{font-size:52px}
+.p5w .s .strike::after{background:var(--pal-fg)}
+</style>
+</head><body class="p5w" data-txt="blur">
+<section class="s black wall pal-amber" data-s="0" data-e="6.3" style="--wall:url(../../video/wallpapers/i%20%282%29.webp);justify-content:flex-start;padding-top:280px" data-camk="3.0 #w 1.1 .8; 4.8 #k40 1.12 .8" data-punch="2.88:.02">
+  <div class="h2" data-wd="0.07,0.1" data-wd-times="0.07,0.4">Пишешь <span class="acc">нейросети</span></div>
+  <div class="gap"></div>
+  <div class="chat"><div class="bub me glass"><span class="bub-who">ты</span>сделай, чтобы оно, ну, выезжало</div></div>
+  <div class="gap"></div>
+  <div class="num huge acc fit" id="w" data-in="2.88" data-a="rise">выезжало</div>
+  <div class="gap"></div>
+  <div class="card kpi" id="k40" style="align-self:flex-start;width:560px;padding:40px 50px">
+    <span class="num roll cells acc" style="font-size:220px" data-roll="2.0,5.04,40,00"></span>
+    <div class="kpi-l p" data-wd="5.12,0.1" data-wd-times="5.12,5.52">версий анимации</div>
+  </div>
+  <img class="pic" src="../video/11-animation-names/img/04-shrek-side-eye-upscaled.png" style="width:300px;height:300px;position:absolute;left:670px;top:1090px" data-in="1.5" data-a="zoom">
+  <img class="ava br" src="../video/avatar/mid.png" style="--ava-h:480px">
+</section>
+<section class="s white pal-sky" data-s="6.3" data-e="10.7" data-tr="grow" data-camk="10.0 #stg 1.12 .7" data-punch="9.92:.02">
+  <div class="h2" data-lines="6.32,7.52">У каждого движения есть <span class="acc">имя</span></div>
+  <div class="gap2"></div>
+  <div class="card" style="width:820px;padding:44px"><div class="p" style="color:var(--mut)" data-in="8.56">одно за другим, с задержкой</div><div class="gap"></div><div class="chips"><span class="chip" data-in="8.56" data-a="rise">слова</span><span class="chip" data-in="8.88" data-a="rise">по</span><span class="chip on" data-in="9.04" data-a="rise">очереди</span></div></div>
+  <div class="gap2"></div>
+  <div class="num term acc fit" id="stg" data-in="9.92" data-a="rise">Stagger</div>
+  <div class="p" data-wd="9.92,0.1" data-wd-times="9.92"><span class="iw"><i class="mi">format_list_bulleted</i> стаггер</span></div>
+</section>
+<section class="s white pal-orange" data-s="10.7" data-e="13.8" data-tr="down" data-camk="11.3 #rl 1.1 .9">
+  <div class="h2" data-wd="10.8,0.1" data-wd-times="10.8,11.96">Цифры <span class="acc">барабаном</span></div>
+  <div class="gap2"></div>
+  <div class="card" id="rl" style="align-self:flex-start;width:800px;padding:44px 50px"><span class="num roll cells acc" style="font-size:190px" data-roll="11.2,12.72,1920,0000"></span><div class="gap"></div><div class="p" data-wd="11.64,0.1" data-wd-times="11.64,11.8,11.96"><span class="iw"><i class="mi">height</i> высота кадра, px</span></div></div>
+  <div class="gap2"></div>
+  <div class="h2" data-wd="12.8,0.1" data-wd-times="12.8,13.12">Number <span class="acc">ticker</span></div>
+</section>
+<section class="s black wall pal-teal" data-s="13.8" data-e="17" data-tr="radial" data-wipe="540,960" style="--wall:url(../../video/wallpapers/9bacc59179f3405ae0d7a1afe6dfe137.jpg)" data-camk="14.5 #ln 1.08 1; 16.0 #ld 1.12 .7">
+  <div class="h2" data-wd="13.84,0.1" data-wd-times="13.84,14.64,15.04">Линия рисует <span class="acc">себя</span></div>
+  <div class="gap2"></div>
+  <div class="card glass lnbox" id="ln"><svg viewBox="0 0 880 560">
+    <path class="grid" d="M60 500H820M60 60V500"/>
+    <path id="lnp" d="M60 470C180 460 230 120 360 150S520 420 640 300S760 90 820 80"/>
+  </svg></div>
+  <div class="gap2"></div>
+  <div class="h2" id="ld" data-wd="15.97,0.1" data-wd-times="15.97,16.32">Line <span class="acc">drawing</span></div>
+</section>
+<section class="s black wall pal-red" data-s="17" data-e="20.6" data-tr="down" style="--wall:url(../../video/wallpapers/7fea174040608cc17b2c12beb632eace.png)" data-camk="18.0 #ft 1.1 .9; 19.95 #jk 1.12 .6" data-punch="19.92:.02">
+  <div class="h2" data-wd="17.52,0.1" data-wd-times="17.52,17.84">Все <span class="acc">дергается</span></div>
+  <div class="gap"></div>
+  <div class="tbl" id="ft" style="--cols:1fr 220px">
+    <div class="tr th" data-in="17.84" data-a="rise"><span>кадр</span><span class="r">мс</span></div>
+    <div class="tr" data-in="17.98" data-a="rise"><span>1</span><span class="r">16</span></div>
+    <div class="tr" data-in="18.12" data-a="rise"><span>2</span><span class="r">16</span></div>
+    <div class="tr on" data-in="18.3" data-a="rise"><span>3</span><span class="r">120</span></div>
+  </div>
+  <div class="gap"></div>
+  <div class="p" data-wd="18.64,0.1" data-wd-times="18.64,18.88,19.04">это не стиль</div>
+  <div class="num term acc fit" id="jk" data-in="19.92" data-a="rise" style="font-size:240px">Jank</div>
+  <img class="pic" src="../video/11-animation-names/img/23-old-man-distorted-face-upscaled.png" style="width:230px;height:230px;object-fit:cover;position:absolute;right:65px;top:250px" data-in="17.84" data-a="zoom">
+</section>
+<section class="s white pal-violet" data-s="20.6" data-e="24.4" data-tr="defocus" style="justify-content:flex-start;padding-top:280px" data-camk="21.4 #fx 1.1 .8; 23.0 c 1 .8">
+  <div class="h2" data-lines="20.72,21.52">Назови эффект <span class="acc">по имени</span></div>
+  <div class="gap2"></div>
+  <div class="field on" id="fx" data-in="21.24" data-a="rise" style="font-size:48px"><i class="mi">auto_awesome</i><span>stagger, number ticker</span><i class="caret"></i></div>
+  <div class="gap2"></div>
+  <div class="list" style="width:820px">
+    <div class="li" data-in="22.32" data-a="rise"><span class="ib"><i class="mi">edit</i></span><span>правка 1</span></div>
+    <div class="li" data-in="22.44" data-a="rise"><span class="ib"><i class="mi">edit</i></span><span class="strike" data-strike="22.84">правка 2</span></div>
+    <div class="li" data-in="22.56" data-a="rise"><span class="ib"><i class="mi">edit</i></span><span class="strike" data-strike="23.24">правка 3</span></div>
+  </div>
+  <img class="ava bl" src="../video/avatar/bl.png" data-in="22.32" data-a="rise" style="--ava-h:500px">
+</section>
+<section class="s white pal-mint outro" data-s="24.4" data-e="26.9" data-tr="up" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам); p5-motion - роллер data-roll, курсор data-cur, перецентровка data-grow -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script>
+// Line drawing: кривая рисует себя от t (сцена 3), cine, без накопленного состояния
+window.p5hook=t=>{const p=document.getElementById('lnp');if(!p)return;const L=p.getTotalLength(),k=P5E.cine(Math.min(1,Math.max(0,(t-14.28)/1.56)));p.style.strokeDasharray=L;p.style.strokeDashoffset=L*(1-k)};
+</script>
+<script src="components/p5-ui.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

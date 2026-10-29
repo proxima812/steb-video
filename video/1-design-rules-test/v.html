@@ -1,0 +1,84 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+.p5w .s .h,.p5w .s .h2,.p5w .s .h3{font-size:120px;line-height:1.02}
+.p5w .s .p{font-size:56px}
+.p5w .s .card{width:800px;white-space:nowrap;box-sizing:border-box}
+</style>
+</head><body class="p5w" data-txt="blur">
+<section class="s black wall pal-red" data-s="0" data-e="4.3" style="--wall:url(../../video/wallpapers/3WPuzddwAIWq.webp)" data-camk="1.5 #n0 1.12 .8; 3.1 c 1 .8" data-punch="1.44:.02" data-tr="shrink">
+  <div class="h" data-lines="0.08,0.4,0.76">Нарушено <span class="acc">правил</span></div>
+  <div class="gap"></div>
+  <div class="card glass" id="n0" style="align-self:flex-start;padding:30px 60px"><div class="num acc" style="font-size:420px" data-ease="cine" data-a="stamp">0</div></div>
+  <div class="gap"></div>
+  <div class="h2" data-wd="3.12,0.1" data-wd-times="2.63,2.72,3.44">а их <span class="acc">140</span></div>
+  <img class="pic" id="m1" src="../video/1-design-rules-test/img/04-shrek-side-eye.jpg" style="width:240px;height:240px;position:absolute;right:65px;top:430px" data-in="1.2" data-a="zoom">
+  <img class="ava br" src="../video/avatar/mid.png" style="--ava-h:560px">
+</section>
+<section class="s white pal-orange" data-s="4.3" data-e="7.6" data-tr="meme" data-wipe="#m1" data-camk="4.8 #e1 1.1 .8; 6.0 #e2 1.1 .8">
+  <div class="h2" data-lines="4.32,4.8">Буква <span class="mark">е</span> без точек</div>
+  <div class="gap"></div>
+  <div class="card" id="e1" style="padding:40px 70px"><div class="num" style="font-size:300px"><span data-in="5.36" data-strike="5.36">ё</span> &rarr; <span class="acc" data-in="5.5">е</span></div></div>
+  <div class="gap"></div>
+  <div class="card" id="e2" data-in="6.0" data-a="rise" style="padding:40px 70px"><div class="num" style="font-size:300px"><span data-in="6.48" data-strike="6.48">&mdash;</span> &rarr; <span class="acc" data-in="6.88">-</span></div></div>
+</section>
+<section class="s white pal-shamrock" data-s="7.6" data-e="10" data-tr="down" data-camk="8.9 #px 1.1 .8">
+  <div class="h3" data-lines="7.68,8.32">Заголовок не меньше</div>
+  <div class="gap2"></div>
+  <div class="num acc" id="px" style="font-size:270px" data-in="8.88" data-a="rise">100px</div>
+  <div class="gap"></div>
+  <div class="p" data-wd="9.2,0.1" data-wd-times="9.2">пикселей</div>
+</section>
+<section class="s black wall pal-pink" data-s="10" data-e="14.1" data-tr="dots" style="--wall:url(../../video/wallpapers/9c04778ad052f16661826024b3696ba7.jpg)" data-camk="10.6 #sz 1.08 1; 12.6 c 1 .9" data-punch="10.48:.02">
+  <div class="h2" data-lines="10,10.48">Отступ <span class="acc">250</span></div>
+  <div class="gap"></div>
+  <div class="card glass" id="sz" style="height:760px;width:800px;position:relative;padding:0">
+    <div style="position:absolute;inset:0 0 auto 0;height:150px;background:var(--pal-bg);opacity:.35;border-radius:20px 20px 0 0" data-in="11.44"></div>
+    <div class="p" style="position:absolute;left:40px;top:40px" data-in="12.16" data-a="rise"><span class="iw"><i class="mi">photo_camera</i> Instagram</span></div>
+    <div class="h3" style="position:absolute;left:40px;top:300px;font-size:110px" data-in="12.72" data-a="rise">ничего <span class="acc">не закрыто</span></div>
+  </div>
+</section>
+<section class="s black wall pal-violet" data-s="14.1" data-e="16.5" data-tr="down" style="--wall:url(../../video/wallpapers/64c0cbe6e3c4d5dff5703a330370102a.jpg)" data-camk="15.0 #cm 1.15 1.2">
+  <div class="h" data-lines="14.11,14.48">Камера едет</div>
+  <div class="gap"></div>
+  <div class="num acc" id="cm" style="font-size:250px" data-in="15.0" data-a="rise">плавно</div>
+  <div class="gap"></div>
+  <div class="p" data-wd="15.44,0.12" data-wd-times="15.44,15.68">без тряски</div>
+</section>
+<section class="s white pal-red" data-s="16.5" data-e="19.6" data-tr="shrink" data-camk="18.4 #ok 1.12 .9" data-punch="18.32:.02">
+  <div class="h2" data-lines="16.56,17.2">Если вы это видите</div>
+  <div class="gap"></div>
+  <div class="card glass" id="ok" style="padding:40px 50px;align-self:flex-start" data-in="18.3" data-a="rise"><div class="h" style="font-size:150px"><span class="iw"><i class="mi">check_circle</i> <span class="acc">тест</span></span></div><div class="h2" style="font-size:150px">пройден</div></div>
+  <img class="pic" src="../video/1-design-rules-test/img/22-dancing-cat.jpeg" style="width:230px;height:230px;position:absolute;right:65px;top:300px" data-in="17.2" data-a="zoom">
+  <img class="ava bl" src="../video/avatar/bl.png" data-in="18.6" data-a="rise" style="--ava-h:520px">
+</section>
+<section class="s white pal-violet outro" data-s="19.6" data-e="22.1" data-tr="dots" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам) -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

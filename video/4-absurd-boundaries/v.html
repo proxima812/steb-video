@@ -1,0 +1,154 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<style>
+/* 4 - абсурдность границ. Пример приемов p5-motion: data-roll, data-cur, data-grow, .chat/.bub, data-link, whip */
+.p5w .ctr{text-align:center;align-self:center}
+.p5w .top{justify-content:flex-start;padding-top:290px}
+.p5w .hk{font-size:110px;letter-spacing:-3.5px;width:100%}
+.p5w .core{display:flex;flex-direction:column;align-items:center;gap:24px;width:800px;align-self:center}
+.p5w #n347{font-size:320px}
+.p5w .meme{position:absolute;right:var(--sz-x);bottom:290px;width:280px;height:280px;object-fit:cover}
+.p5w .s .bub{font-size:64px;max-width:800px}
+.p5w .s .chat{max-width:800px;gap:34px}
+.p5w .s .bub-who{font-size:34px}
+.p5w .pr{width:800px;align-self:flex-end;padding:34px 38px;font-size:44px;line-height:1.45}
+.p5w .pr .hd{display:flex;justify-content:space-between;font-family:Inter;font-weight:700;font-size:42px;margin-bottom:10px}
+.p5w .pr .ad{color:var(--pal-fg)}.p5w .pr .rm{color:var(--mut);text-decoration:line-through}
+.p5w .verdict{align-self:center;font-size:76px}
+.p5w .cloud{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;align-self:center;width:950px}
+.p5w .cloud .chip,.p5w .viol .chip{font-size:46px;padding:18px 34px}
+.p5w .viol{padding:36px;min-height:420px;display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.p5w .viol .lb{display:flex;align-items:center;gap:14px;font-family:Inter;font-weight:700;font-size:56px;letter-spacing:-1.5px;color:var(--pal-fg)}
+.p5w .viol .lb .mi{font-size:64px}
+.p5w .tree{display:flex;flex-direction:column;align-items:center;gap:150px;width:100%}
+.p5w .node{display:inline-flex;align-items:center;gap:18px;padding:34px 60px;border-radius:999px;font-family:Inter;font-weight:800;font-size:72px;letter-spacing:-2.5px;background:var(--pal-bg);color:var(--pal-fg)}
+.p5w .node .mi{font-size:76px}
+.p5w .kids{display:flex;gap:28px;width:100%}
+.p5w .leaf{flex:1;padding:48px 22px;min-height:470px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.p5w .leaf .mi{font-size:120px;color:var(--pal-bg)}
+.p5w .leaf b{font-family:Inter;font-weight:700;font-size:48px;letter-spacing:-1.5px}
+.p5w .leaf span{font-family:Inter;font-weight:800;font-size:56px;letter-spacing:-1.5px;color:var(--pal-bg)}
+.p5w .leaf i.d{font-style:normal;font-size:36px;line-height:1.15;color:var(--mut)}
+.p5w .trio{display:flex;justify-content:center;gap:20px}
+.p5w .trio{flex-wrap:wrap;width:950px;align-self:center}.p5w .trio .chip{font-size:52px;padding:22px 38px}
+.p5w .onerule{flex:none;background:var(--pal-bg);color:var(--pal-fg);box-shadow:none;align-self:center;width:800px;padding:70px 60px;font-family:Inter;font-weight:800;font-size:104px;letter-spacing:-3px;text-align:center;line-height:1}
+.p5w .story{align-self:center;width:720px;padding:18px;border-radius:28px;display:flex;flex-direction:column;gap:22px}
+.p5w .story img{width:100%;height:640px;object-fit:cover;border-radius:18px;display:block}
+.p5w .story .st{color:var(--pal-fg);font-family:'Google Sans';font-weight:500;font-size:50px;line-height:1.15;letter-spacing:-1px;min-height:116px;padding:0 12px}
+.p5w .pub{align-self:center;display:inline-flex;align-items:center;gap:14px;padding:24px 48px;border-radius:999px;font-family:Inter;font-weight:700;font-size:48px;
+  background:color-mix(in srgb,var(--card) calc(100%*var(--done,0)),var(--pal-fg));color:color-mix(in srgb,var(--mut) calc(100%*var(--done,0)),var(--pal-bg));
+  translate:0 calc(6px*var(--press,0));filter:brightness(calc(1 - .12*var(--hover,0) - .12*var(--press,0)))}
+.p5w .pub .mi{font-size:52px}
+.p5w .pair{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.p5w .opt{padding:48px 36px;display:flex;flex-direction:column;gap:16px;min-height:500px}
+.p5w .opt .mi{font-size:110px;color:var(--pal-bg)}
+.p5w .opt b{font-family:Inter;font-weight:800;font-size:76px;letter-spacing:-2.5px}
+.p5w .opt span{font-size:44px;color:var(--mut);line-height:1.15}
+.p5w .opt.off b{color:var(--mut)}
+</style>
+</head><body class="p5w" data-txt="blur">
+
+<section class="s black pal-purple" data-s="0" data-e="4.2" data-punch="2.64:.02" data-camk="2.24 #core 1.08 .7">
+  <div class="h2 hk ctr" data-lines="-1,-1,-1" data-in="0.08">У среднего человека</div>
+  <div class="gap2"></div>
+  <div class="core" id="core">
+    <div class="num roll cells glass" id="n347" data-roll="0.3,2.84,347,0"></div>
+    <div class="h2 hk ctr" data-lines="2.88,3.36">личных <span class="acc">границ</span></div>
+  </div>
+  <img class="pic meme" id="shrek" src="../video/4-absurd-boundaries/img/shrek.jpg" alt="" data-in="0.8" data-a="zoom">
+  <img class="ava bl" src="../video/avatar/bl.png" alt="" style="--ava-h:560px">
+</section>
+
+<section class="s white pal-sky" data-s="4.2" data-e="7.5" data-tr="dots" data-punch="6.15:.02" data-camk="6.75 #chat 1.06 .6">
+  <div class="h2 ctr" data-lines="4.32,4.80,5.20,5.52">Попросил коллегу глянуть <span class="acc">код?</span></div>
+  <div class="gap"></div>
+  <div class="chat" id="chat" data-grow="y">
+    <div class="bub me" data-in="5.2" data-a="blur">глянешь мой PR?</div>
+    <div class="box pr mono" data-in="5.52" data-a="blur"><div class="hd"><span>PR #214</span><span class="ad">+38 -12</span></div><div class="ad">+ if (user.ok) save(user)</div><div class="rm">- save(user)</div><div class="ad">+ log("готово")</div></div>
+    <div class="bub bot" id="b2" data-in="6.15" data-a="blur"><span class="bub-who">коллега</span>это нарушает мои границы</div>
+    <div class="stampx verdict" data-in="6.59" data-a="stamp">нарушение</div>
+  </div>
+</section>
+
+<section class="s white pal-orange" data-s="7.5" data-e="12.7" data-tr="down" data-camk="9.2 #viol 1.06 .8; 10.15 c 1 .6; 12.0 #viol 1.08 .6"
+  data-cur="7.59 #c1 drag #s1 .6; 10.39 #c2 drag #s2 .6; 12.35 hide">
+  <div class="h2 ctr" data-lines="7.59,7.99,8.31">Написал после шести?</div>
+  <div class="h2 ctr" data-lines="10.15,10.55,10.91">Лайкнул старое <span class="acc">фото?</span></div>
+  <div class="gap"></div>
+  <div class="cloud" data-safe data-in="7.6" data-a="rise">
+    <span class="chip">привет</span><span class="chip" id="c1">сообщение в 18:05</span><span class="chip">спасибо</span><span class="chip" id="c2">лайк фото 2019</span><span class="chip">с днем рождения</span>
+  </div>
+  <div class="gap"></div>
+  <div class="box viol" data-safe id="viol" data-in="7.8" data-a="rise">
+    <div class="lb"><i class="mi">gavel</i>нарушения</div>
+    <span class="chip" id="s1">сообщение в 18:05</span>
+    <span class="chip" id="s2">лайк фото 2019</span>
+  </div>
+</section>
+
+<section class="s pal-cherry white" data-s="12.7" data-e="16.2" data-tr="radial" data-wipe="540,1300" data-camk="15.6 #lf3 1.08 .8">
+  <div class="tree" data-safe>
+    <div class="node glass pal-lime" id="nd" data-in="12.75" data-a="blur"><i class="mi">block</i>мои границы</div>
+    <div class="kids">
+      <div class="box leaf pal-lime" id="lf1" data-in="13.27" data-a="blur" data-link="#nd"><i class="mi">call</i><b>звонить</b><span>нельзя</span><i class="d">даже если горит</i></div>
+      <div class="box leaf" id="lf2" data-in="14.27" data-a="blur" data-link="#nd"><i class="mi">chat</i><b>писать</b><span>нельзя</span><i class="d">после 18:00</i></div>
+      <div class="box leaf" id="lf3" data-in="15.55" data-a="blur" data-link="#nd"><i class="mi">help</i><b>спрашивать</b><span>нельзя</span><i class="d">даже «как дела?»</i></div>
+    </div>
+  </div>
+</section>
+
+<section class="s black wall pal-teal top" data-s="16.2" data-e="21" data-tr="up" data-punch="19.69:.02" data-camk="19.6 #rule 1.12 .8" style="--wall:url(../../video/wallpapers/3WPuzddwAIWq.webp)">
+  <div class="h2 hk ctr" data-lines="16.29,16.41,18.41,18.65">В итоге <span class="acc">одно правило:</span></div>
+  <div class="gap"></div>
+  <div class="trio">
+    <span class="chip" id="k1" data-in="16.81" data-a="blur">не звони</span>
+    <span class="chip" id="k2" data-in="17.13" data-a="blur">не пиши</span>
+    <span class="chip" id="k3" data-in="17.69" data-a="blur">не спрашивай</span>
+  </div>
+  <div style="height:120px;flex:none"></div>
+  <div class="box onerule" id="rule" data-in="19.53" data-a="blur" data-link="#k1 #k2 #k3,18.95,.55">Не общайся<br>со мной</div>
+  <img class="ava mid" src="../video/avatar/mid.png" alt="" data-in="19.9" data-a="rise" style="--ava-h:380px">
+</section>
+
+<section class="s white pal-pink" data-s="21" data-e="23.7" data-tr="whip" data-camk="21.9 #story 1.05 .7; 22.75 c 1 .5" data-cur="22.4 #pub .5; 22.95 #pub click .3; 23.55 hide">
+  <div class="h2 ctr" data-lines="21.03,21.13,21.37,21.45">А потом в <span class="acc">сторис:</span></div>
+  <div class="gap2"></div>
+  <div class="box story" id="story" data-in="21.2" data-a="blur">
+    <img src="../video/4-absurd-boundaries/img/sad.webp" alt="">
+    <div class="st" data-type="почему мне никто не пишет?" data-t0="22.17" data-cps="24"></div>
+  </div>
+  <div class="gap2"></div>
+  <div class="pub" id="pub" data-in="21.6" data-a="blur"><i class="mi">send</i>опубликовать</div>
+</section>
+
+<section class="s black wall pal-amber" data-s="23.7" data-e="27.4" data-tr="dots" data-punch="25.56:.02" data-camk="25.65 #fence 1.1 .6; 26.3 c 1 .6" style="--wall:url(../../video/wallpapers/i%20(1).webp)">
+  <div class="h2 hk ctr" data-lines="23.75,24.35">Границы <span class="acc">нужны</span></div>
+  <div class="gap"></div>
+  <div class="pair">
+    <div class="box opt glass" id="fence" data-in="25.56" data-a="blur"><i class="mi">fence</i><b>забор</b><span>с калиткой</span></div>
+    <div class="box opt off" data-in="26.32" data-a="blur"><i class="mi">lock</i><b>бункер</b><span>без выхода</span></div>
+  </div>
+  <img class="ava bl" src="../video/avatar/bl.png" alt="" data-in="24.35" data-a="rise" style="--ava-h:520px">
+</section>
+
+<section class="s white pal-violet outro" data-s="27.4" data-e="29.9" data-tr="shrink" data-deco="none"></section>
+
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<script src="components/p5-ui.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+</body></html>

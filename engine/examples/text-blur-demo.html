@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru"><head><base href="../"><meta charset="utf-8">
+<title>Появление текста blur + длинная фраза графикой</title>
+<!-- Пример мира p5w: <body data-txt="blur"> - слова поднимаются на 3px из размытия 4px (split-type, runtime/p5-lines.js и data-wd).
+     Длинная фраза озвучки «Семантический поиск сравнивает смысл запроса и документа, а не совпадение букв,
+     поэтому по запросу диван он находит софу» на экран не выводится целиком: короткий заголовок + график, который показывает ее смысл.
+     Тайминги демонстрационные; в ролике - из words.json. -->
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css">
+<style>
+.p5w #lead{font-size:106px;letter-spacing:-3.5px}
+.p5w .srch{display:flex;align-items:center;gap:22px;padding:30px 36px;font-size:58px}
+.p5w .srch .mi{font-size:64px;color:var(--mut)}
+.p5w .res{display:grid;grid-template-columns:250px 1fr 130px;align-items:center;gap:26px;padding:34px 36px;font-size:56px}
+.p5w .res .bar{height:32px;border-radius:16px;background:var(--acc2);transform-origin:0 50%}
+.p5w .res.off .bar{background:var(--mut)}
+.p5w .res .v{font-size:44px;text-align:right;color:var(--mut)}
+.p5w #map{width:800px;height:522px;align-self:center}
+.p5w #map text{font-family:Inter;font-weight:600;font-size:52px;fill:var(--note-ink)}
+.p5w #map .lb{font-family:'Google Sans';font-weight:500;font-size:34px;fill:var(--note-pencil)}
+</style>
+</head><body class="p5w" data-txt="blur">
+<section class="s dark" data-s="0" data-e="4.6" data-punch="1.2:.02:thud,3.5:.015:-">
+  <div class="h" id="lead" data-lines="0.1,0.35,0.6,0.85,1.1">Ищешь <span class="acc">«диван»</span> - находит «софу»</div>
+  <div class="gap2"></div>
+  <div class="box srch mono" id="q"><i class="mi">search</i>диван</div>
+  <div class="gap"></div>
+  <div class="box" data-safe>
+    <div class="res" data-in="1.6" data-a="rise"><span>софа</span><div class="bar" style="width:92%"></div><span class="v mono">0.92</span></div>
+    <div class="res" data-in="2.1" data-a="rise"><span>тахта</span><div class="bar" style="width:86%"></div><span class="v mono">0.86</span></div>
+    <div class="res off" data-in="2.6" data-a="rise"><span>дивиденд</span><div class="bar" style="width:12%"></div><span class="v mono">0.12</span></div>
+  </div>
+</section>
+<section class="s light" data-s="4.6" data-e="9.6" data-tr="wipe" data-camk="7 #map 1.1 1.2; 8.6 c 1 0.8">
+  <div class="h2" data-wd="4.9,0.2" data-wd-times="4.9,5.1,5.35,5.55,5.7,5.9">Близко по смыслу, не по буквам</div>
+  <div class="gap"></div>
+  <svg id="map" viewBox="0 0 950 620" data-safe>
+    <path d="M300 200 L470 270" stroke="var(--note-pen)" stroke-width="6" fill="none" data-draw="6.2,6.9"/>
+    <path d="M300 200 L760 520" stroke="var(--note-pencil)" stroke-width="4" stroke-dasharray="14 12" fill="none" data-draw="7.4,8.1" opacity=".7"/>
+    <g data-in="5.7" data-a="rise"><circle cx="300" cy="200" r="22" fill="var(--note-pen)"/><text x="80" y="218">диван</text></g>
+    <g data-in="6.0" data-a="rise"><circle cx="470" cy="270" r="22" fill="var(--note-pen)"/><text x="505" y="290">софа</text></g>
+    <g data-in="6.3" data-a="rise"><circle cx="400" cy="370" r="22" fill="var(--note-pen)"/><text x="280" y="440">тахта</text></g>
+    <g data-in="7.3" data-a="rise"><circle cx="760" cy="520" r="22" fill="var(--note-pencil)"/><text x="560" y="590">дивиденд</text></g>
+    <text class="lb" x="360" y="185" data-in="6.6" data-a="rise">смысл рядом</text>
+    <text class="lb" x="610" y="365" data-in="8" data-a="rise">буквы похожи</text>
+  </svg>
+</section>
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+</body></html>

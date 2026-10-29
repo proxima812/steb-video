@@ -1,0 +1,181 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+.p5w .s .h2{font-size:124px;line-height:1.02}
+.p5w .s .h2.big{font-size:150px}
+.p5w .s .p{font-size:54px}
+.p5w .s .huge{font-size:240px;line-height:.95;letter-spacing:-9px}
+.fit{align-self:flex-start;width:fit-content}
+.fitr{align-self:flex-end;width:fit-content}
+.sock{display:block;overflow:visible}
+.sock .b{fill:var(--sk,var(--acc));stroke:var(--ol,currentColor);stroke-width:7;stroke-linejoin:round}
+.sock .c{fill:var(--sk2,var(--pal-fg));stroke:var(--ol,currentColor);stroke-width:7;stroke-linejoin:round}
+.sock .st{fill:var(--sk2,var(--pal-fg))}
+.sock .h{fill:none;stroke:var(--ol,currentColor);stroke-width:6}
+.prof{width:520px;padding:0;overflow:hidden}
+.prof .ph{height:400px;display:flex;align-items:center;justify-content:center;background:var(--tile)}
+.prof .meta{padding:26px 32px;font-size:40px;line-height:1.2}
+.prof .meta b{font-family:Inter;font-weight:700;font-size:48px;letter-spacing:-1px;display:block}
+.acts{display:flex;gap:28px;justify-content:center;padding:0 0 30px}
+.acts .btn{width:120px;height:120px;padding:0;font-size:64px}
+.hookgrid{display:grid;grid-template-columns:520px 1fr;gap:40px;align-items:start;width:950px}
+.p5w .s .bub{font-size:62px;max-width:930px;padding:36px 44px}
+.p5w .s .bub-who{font-size:36px}
+.anketa{width:950px;padding:0;overflow:hidden}
+.anketa .win-body{display:grid;grid-template-columns:330px 1fr;gap:34px;align-items:center}
+.p5w .s .chips{display:flex;flex-wrap:wrap;gap:20px}
+.p5w .s .chips .chip{font-size:58px;padding:24px 42px}
+.p5w .s .look{font-size:62px;line-height:1.2;padding:30px 36px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:30px;width:950px}
+.cmp .tile{display:flex;justify-content:center;padding:30px}
+.p5w .s .tbl.ctab{width:950px}
+.p5w .s .ctab .tr{font-size:52px;padding-top:28px;padding-bottom:28px}
+.ctab .mi{font-size:60px;vertical-align:-12px}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;width:950px}
+.sgrid .tile{display:flex;align-items:center;justify-content:center;height:250px;padding:18px}
+.prod{width:950px}
+.prod .pair{display:flex;justify-content:center;gap:50px;padding:20px 0}
+.price{display:flex;align-items:baseline;gap:36px}
+.price .old{font-size:70px;color:var(--mut)}
+.p5w .s .fin .li{font-size:76px;padding-top:50px;padding-bottom:50px;letter-spacing:-1.5px}
+.p5w .s .fin .ib{font-size:84px}
+.p5w .s .toast{font-size:40px}.p5w .s .toast b{font-size:50px}
+.p5w .s .win-bar{font-size:34px}
+.halves{display:flex;align-items:center;justify-content:center;gap:44px;width:950px}
+.halves .tile{width:320px;height:340px;display:flex;align-items:center;justify-content:center}
+.halves .slot{background:transparent;box-shadow:inset 0 0 0 4px var(--ring)}
+.halves .q{font-family:Inter;font-weight:800;font-size:180px;color:var(--acc);letter-spacing:-4px}
+
+</style>
+</head><body class="p5w" data-txt="blur">
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-pink" data-s="0" data-e="4.4" style="--wall:url(../../video/wallpapers/7fea174040608cc17b2c12beb632eace.png);justify-content:flex-start;padding-top:270px" data-camk="0.8 #pf 1.08 1; 2.4 c 1 .8" data-punch="2.08:.02">
+  <div id="t1" data-camera-keep class="h2" data-wd="0.16,0.12" data-wd-times="0.16,0.32,0.72">За одну <span class="acc">ночь</span></div>
+  <div class="gap"></div>
+  <div class="hookgrid">
+    <div class="card prof glass" id="pf">
+      <div class="ph"><svg class="sock" viewBox="0 0 260 320" width="250" height="307" style="" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+      <div class="meta"><b>Левый, 3 стирки</b>ищет пару</div>
+      <div class="acts"><span class="btn ghost"><i class="mi">close</i></span><span class="btn"><i class="mi">check</i></span></div>
+    </div>
+    <img class="pic" src="../video/14-sock-dating/img/04-shrek-side-eye-upscaled.png" style="width:390px;height:390px;object-fit:cover" data-in="1.24" data-a="rise" alt="">
+  </div>
+  <div class="gap"></div>
+  <div class="num huge acc" id="big" data-in="2.08" data-a="rise">тиндер</div>
+  <div class="p" style="align-self:flex-end;margin-top:6px" data-wd="2.96,0.1" data-wd-times="2.96,3.20,3.68">для одиноких <span class="acc">носков</span></div>
+  <img class="ava low" src="../video/avatar/mid.png" style="--ava-h:330px" alt="">
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-blue" data-s="4.4" data-e="9.1" data-tr="dots" data-dots-dir="right" data-camk="6.6 #pr 1.08 .9">
+  <div id="t2" data-camera-keep class="h2 big" data-wd="4.56,0.1" data-wd-times="4.56">Промпт</div>
+  <div class="gap2"></div>
+  <div class="chat" id="pr">
+    <div class="bub me"><span class="bub-who">ты</span><span data-wd="5.36,0.1" data-wd-times="5.36,5.76,6.44,6.68,7.00,7.20,7.60,8.00,8.32">сделай приложение, где носок без пары находит свою половинку</span></div>
+  </div>
+  <div class="gap2"></div>
+  <div class="halves">
+    <div class="tile" data-in="6.68" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="200" height="246" style="" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <span class="ib solid" data-in="7.60" data-a="rise" style="font-size:90px"><i class="mi">sync_alt</i></span>
+    <div class="tile slot" data-in="8.32" data-a="rise"><span class="q">?</span></div>
+  </div>
+</section>
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-orange" data-s="9.1" data-e="14.3" data-tr="dots" data-dots-dir="up" style="--wall:url(../../video/wallpapers/a33b17aa263614fcd0b3d555cd4bbcd8.jpg)" data-camk="13.1 #look 1.12 .9">
+  <div id="t3" data-camera-keep class="h2" data-wd="9.28,0.1" data-wd-times="9.28">Анкета</div>
+  <div class="gap2"></div>
+  <div class="win anketa glass">
+    <div class="win-bar"><i></i><i></i><i></i><b>Носкер · профиль</b></div>
+    <div class="win-body">
+      <div class="tile" style="display:flex;justify-content:center;padding:30px"><svg class="sock" viewBox="0 0 260 320" width="280" height="344" style="" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+      <div class="chips">
+        <span class="chip on" data-in="10.24" data-a="rise">левый</span>
+        <span class="chip" data-in="10.84" data-a="rise">хлопок</span>
+        <span class="chip" data-in="11.52" data-a="rise">3 стирки</span>
+      </div>
+    </div>
+  </div>
+  <div class="gap2"></div>
+  <div class="tile on look fit" id="look" style="width:800px" data-in="12.48" data-a="rise"><span data-wd="12.48,0.1" data-wd-times="12.48,12.84,13.44">ищет серьезные отношения</span></div>
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-teal" data-s="14.3" data-e="18.0" data-tr="dots" data-dots-dir="left" data-camk="15.9 #ct 1.08 .9">
+  <div id="t4" data-camera-keep class="h2" data-wd="14.48,0.1" data-wd-times="14.48,15.04">Алгоритм <span class="acc">сравнивает</span></div>
+  <div class="gap2"></div>
+  <div class="cmp">
+    <div class="tile"><svg class="sock" viewBox="0 0 260 320" width="300" height="369" style="--sk:var(--pal-bg);--sk2:var(--pal-fg)" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="tile"><svg class="sock" viewBox="0 0 260 320" width="300" height="369" style="--sk:var(--card);--sk2:var(--acc)" aria-hidden="true"><g transform="translate(260 0) scale(-1 1)"><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/><circle class="h" cx="120" cy="140" r="11"/><circle class="h" cx="100" cy="250" r="11"/><circle class="h" cx="150" cy="240" r="11"/></g></svg></div>
+  </div>
+  <div class="gap"></div>
+  <div class="tbl ctab" id="ct" style="--cols:1fr 140px">
+    <div class="tr" data-in="15.64" data-a="rise"><span>цвет</span><span class="r"><i class="mi">close</i></span></div>
+    <div class="tr" data-in="16.20" data-a="rise"><span>размер</span><span class="r"><i class="mi">close</i></span></div>
+    <div class="tr on" id="hole" data-in="17.36" data-a="rise"><span>дырки: 0 и 3</span><span class="r"><i class="mi">close</i></span></div>
+  </div>
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-red" data-s="18.0" data-e="21.9" data-tr="dots" data-dots-dir="down" data-camk="20.2 #sg 1.08 .9" data-punch="19.04:.02">
+  <div class="kpi" style="flex-direction:row;align-items:baseline;gap:40px">
+    <span class="num acc" style="font-size:300px;line-height:.9" data-in="19.04" data-a="rise">0</span>
+    <div id="t5" data-camera-keep class="h2" style="font-size:110px" data-wd="18.16,0.1" data-wd-times="18.16">совпадений</div>
+  </div>
+  <div class="gap2"></div>
+  <div class="sgrid" id="sg">
+    <div class="tile" data-in="19.6" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="tile" data-in="19.7" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--pal-bg)" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><rect class="st" x="72" y="126" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="tile" data-in="19.8" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--card)" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/><circle class="h" cx="120" cy="150" r="11"/></g></svg></div>
+    <div class="tile" data-in="19.9" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--pal-fg);--sk2:var(--pal-bg)" aria-hidden="true"><g transform="translate(260 0) scale(-1 1)"><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="tile" data-in="20.0" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--mut)" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="tile" data-in="20.1" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--card);--sk2:var(--pal-fg)" aria-hidden="true"><g transform="translate(260 0) scale(-1 1)"><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><rect class="st" x="72" y="126" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="tile" data-in="20.2" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--pal-bg);--sk2:var(--mut)" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/><circle class="h" cx="110" cy="120" r="11"/><circle class="h" cx="150" cy="260" r="11"/></g></svg></div>
+    <div class="tile" data-in="20.3" data-a="rise"><svg class="sock" viewBox="0 0 260 320" width="150" height="184" style="--sk:var(--acc);--sk2:var(--card)" aria-hidden="true"><g transform="translate(260 0) scale(-1 1)"><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+  </div>
+  <div class="gap2"></div>
+  <div class="p" data-wd="20.32,0.1" data-wd-times="20.32,20.88,21.04">уникален, как <span class="iw">снежинка <i class="mi">ac_unit</i></span></div>
+</section>
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-lime" data-s="21.9" data-e="26.2" data-tr="dots" data-dots-dir="right" style="--wall:url(../../video/wallpapers/i%20%281%29.webp)" data-camk="25.2 #pz 1.12 .8" data-punch="25.04:.02">
+  <div id="t6" data-camera-keep class="h2" data-wd="23.36,0.1" data-wd-times="23.36,23.84,24.24">Разные носки <span class="acc">парой</span></div>
+  <div class="gap2"></div>
+  <div class="card prod glass">
+    <div class="pair"><svg class="sock" viewBox="0 0 260 320" width="260" height="320" style="--sk:var(--pal-bg);--sk2:var(--pal-fg)" aria-hidden="true"><g><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg><svg class="sock" viewBox="0 0 260 320" width="260" height="320" style="--sk:var(--card);--sk2:var(--pal-bg)" aria-hidden="true"><g transform="translate(260 0) scale(-1 1)"><path class="b" d="M70 12 H170 V180 C170 196 180 206 196 210 L226 218 C262 228 262 300 220 300 H112 C72 300 52 270 60 232 L70 180 Z"/><rect class="st" x="72" y="66" width="96" height="14"/><rect class="st" x="72" y="96" width="96" height="14"/><rect class="st" x="72" y="126" width="96" height="14"/><path class="c" d="M200 211 L226 218 C262 228 262 300 220 300 L200 300 Z"/><rect class="c" x="70" y="12" width="100" height="40" rx="6"/></g></svg></div>
+    <div class="sep"></div>
+    <div class="price" style="padding:20px 10px 0" id="pz"><span class="old strike" data-strike="24.96">490 ₽</span><span class="num acc" style="font-size:150px" data-in="25.04" data-a="rise">×3</span></div>
+  </div>
+  <div class="gap"></div>
+  <div class="p" style="align-self:flex-end" data-wd="24.96,0.1" data-wd-times="24.96,25.04,25.28,25.72">в три раза <span class="acc">дороже</span></div>
+</section>
+<section data-camdim=".7" data-camfit="safe" class="s white pal-indigo" data-s="26.2" data-e="31.0" data-tr="dots" data-dots-dir="up" style="justify-content:flex-start;padding-top:290px" data-camk="30.0 #inv 1.1 .8" data-punch="29.84:.02">
+  <div id="t7" data-camera-keep class="h2" data-wd="26.32,0.1" data-wd-times="26.32,26.80,26.92">Стартап <span class="acc">не нашел</span></div>
+  <div class="gap2"></div>
+  <div class="list fin" style="width:950px">
+    <div class="li" data-in="27.28" data-a="rise"><span class="ib"><i class="mi">close</i></span><span data-wd="27.28,0.1" data-wd-times="27.28,27.68,27.84,28.36">пару ни одному носку</span></div>
+    <div class="li on" id="inv" data-in="29.12" data-a="rise"><span class="ib solid"><i class="mi">check</i></span><span data-wd="29.12,0.1" data-wd-times="29.12,29.52,29.84">зато нашел инвесторов</span></div>
+  </div>
+  <img class="ava bl" src="../video/avatar/bl.png" data-in="29.12" data-a="rise" style="--ava-h:440px" alt="">
+</section>
+<section class="s white pal-yellow outro" data-s="31.0" data-e="33.5" data-tr="dots" data-dots-dir="left" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам); p5-motion - роллер data-roll, курсор data-cur, перецентровка data-grow -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="components/p5-ui.js"></script>
+<script src="runtime/p5-camera.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Демонстрация новых переходов p5w: dissolve, defocus и мягкого ухода data-exit. Тайминги демонстрационные, без озвучки.
+     Проверка: node checks/transition-endpoints.mjs (из engine/). Пользовательские ролики не затрагивает. -->
+<base href="../">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css">
+</head><body class="p5w" data-txt="blur">
+<section class="s white pal-sky" data-s="0" data-e="3">
+  <div class="h" data-lines="0.1,0.3">Растворение</div>
+  <div class="gap"></div>
+  <div class="card" id="a1" style="padding:40px 50px;align-self:flex-start" data-in="0.6" data-a="rise"><div class="h3">тот же фон</div></div>
+</section>
+<section class="s white pal-orange" data-s="3" data-e="6" data-tr="dissolve">
+  <div class="h" data-lines="3.1,3.3">Новая сцена</div>
+  <div class="gap"></div>
+  <div class="p" data-in="3.9" data-a="rise">проявилась поверх старой</div>
+</section>
+<section class="s black pal-violet" data-s="6" data-e="9" data-tr="defocus">
+  <div class="h" data-lines="6.4,6.6">Расфокус</div>
+  <div class="gap"></div>
+  <div class="card glass" id="d1" style="padding:40px 50px;align-self:flex-start" data-in="7.1" data-a="rise"><div class="h3">из размытия</div></div>
+</section>
+<section class="s black pal-lime" data-s="9" data-e="12" data-tr="down">
+  <div class="h2" data-lines="9.9,10.1">Уход объекта</div>
+  <div class="gap"></div>
+  <div class="card" id="x1" style="padding:40px 50px;align-self:flex-start" data-in="9.3" data-a="rise" data-exit="10.5,.6"><div class="h3">уходит вверх</div></div>
+  <div class="p" id="x2" data-exit="11,.5">без входа</div>
+</section>
+<section class="s white pal-violet outro" data-s="12" data-e="14.5" data-tr="dots" data-deco="none" data-ava="none"></section>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-lines.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>init();render(0);</script>
+</body></html>

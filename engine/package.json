@@ -1,0 +1,26 @@
+{
+  "name": "work",
+  "module": "examples/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "video": "node pipeline/video.mjs",
+    "check:video": "node checks/check.mjs"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "animejs": "^4.5.0",
+    "d3-interpolate": "^3.0.1",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
+    "mathjax-full": "3.2.2",
+    "puppeteer-core": "^25.14.0",
+    "split-type": "^0.3.4",
+    "three": "0.186.1"
+  }
+}

@@ -1,0 +1,165 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+.p5w .s .h2{font-size:124px;line-height:1.02}
+.p5w .s .h2.big{font-size:150px}
+.p5w .s .p{font-size:50px}
+.p5w .s .huge{font-size:230px;line-height:.95;letter-spacing:-8px}
+.fit{align-self:flex-start;width:fit-content}
+.fitr{align-self:flex-end;width:fit-content}
+.meet{width:950px}
+.meet .win-bar{font-size:32px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.mgrid.g3{grid-template-columns:1fr 1fr 1fr}
+.ptile{position:relative;height:290px;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:Inter;font-weight:700;font-size:72px;letter-spacing:-2px}
+.mgrid.g3 .ptile{height:230px;font-size:64px}
+.ptile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ptile .nm{position:absolute;left:16px;bottom:14px;font-family:'Google Sans';font-weight:500;font-size:34px;letter-spacing:-.5px;padding:6px 14px;border-radius:var(--r-s);background:var(--card);color:var(--mut)}
+.ptile .mi{font-size:120px}
+.ptile .botov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--pal-bg);color:var(--pal-fg);--acc:var(--pal-fg)}
+.ptile .botov .mi{font-size:110px}
+.logt{width:900px}
+.p5w .s .logt .tr{font-size:52px}
+.p5w .s .logt .tr{padding-top:30px;padding-bottom:30px}
+.p5w .s .bub{font-size:64px;max-width:900px;padding:36px 44px}
+.p5w .s .bub-who{font-size:36px}
+.exl{width:900px}
+.p5w .s .exl .li{font-size:60px;padding-top:34px;padding-bottom:34px}
+.p5w .s .exl .ib{font-size:64px}
+.p5w .s .seg>span{font-size:54px;padding:26px 56px;color:inherit}
+.p5w .s .toast{font-size:38px}
+.p5w .s .toast b{font-size:46px}
+
+.p5w .s .meet .win-bar{font-size:34px}
+.p5w .s .h2.one{font-size:112px;white-space:nowrap}
+.mgrid.sm .ptile{height:230px}
+.p5w .s .bub{font-size:70px}
+.p5w .s .btn.gen{font-size:52px;padding:30px 56px;translate:0 calc(var(--press,0)*4px)}
+.p5w .s .logt .tr{padding-top:36px;padding-bottom:36px}
+
+</style>
+</head><body class="p5w" data-txt="blur">
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-sky" data-s="0" data-e="3.9" style="--wall:url(../../video/wallpapers/64c0cbe6e3c4d5dff5703a330370102a.jpg);justify-content:flex-start;padding-top:270px" data-camk="0.9 #mg 1.08 1; 2.9 c 1 .8" data-punch="2.88:.02">
+  <div id="t1" data-camera-keep class="h2 one" data-wd="0.16,0.12" data-wd-times="0.16,0.32,0.48">Созвон <span class="acc">без тебя</span></div>
+  <div class="gap"></div>
+  <div class="win meet glass" id="mg">
+    <div class="win-bar"><i></i><i></i><i></i><b>Созвон 11:00 · дейли</b></div>
+    <div class="win-body"><div class="mgrid sm">
+      <div class="tile ptile"><img src="../video/13-call-skip-bot/img/12-chimp-webcam-upscaled.png" data-in="1.2" data-a="rise" alt=""><span class="nm">Тимлид</span></div>
+      <div class="tile ptile">АК<span class="nm">Аня</span></div>
+      <div class="tile ptile">МР<span class="nm">Марк</span></div>
+      <div class="tile ptile on" id="tbot"><i class="mi">smart_toy</i><span class="nm">ты (бот)</span></div>
+    </div></div>
+  </div>
+  <div class="gap"></div>
+  <div class="num huge acc fitr" id="big" data-in="2.88" data-a="rise">вместо</div>
+  <img class="ava bl" src="../video/avatar/bl.png" style="--ava-h:400px" alt="">
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-violet" data-s="3.9" data-e="7.8" data-tr="dots" data-dots-dir="right" data-camk="5.5 #pr 1.1 .8" data-cur="6.4 700,1500; 6.6 #gen click .6; 7.7 hide">
+  <div id="t2" data-camera-keep class="h2 big" data-wd="4.08,0.1" data-wd-times="4.08,4.48,4.72">Промпт был <span class="acc">один</span></div>
+  <div class="gap2"></div>
+  <div class="chat" id="pr">
+    <div class="bub me"><span class="bub-who">ты</span><span data-wd="5.52,0.1" data-wd-times="5.52,6.00,6.36,6.56,6.72,7.08,7.20">сделай, чтобы меня не звали в зум</span></div>
+    <div class="bub bot" data-in="7.35" data-a="blur"><span class="bub-who">нейросеть</span>Понял. Отправлю вместо вас бота</div>
+  </div>
+  <div class="gap"></div>
+  <button class="btn fitr gen" id="gen"><i class="mi">auto_awesome</i>Собрать стартап</button>
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s black wall pal-amber" data-s="7.8" data-e="11.1" data-tr="dots" data-dots-dir="up" style="--wall:url(../../video/wallpapers/9c04778ad052f16661826024b3696ba7.jpg)" data-camk="9.3 #bt 1.1 .9">
+  <div class="card kpi fit" style="padding:36px 50px">
+    <span class="num roll cells acc" style="font-size:200px" data-roll="7.99,8.56,10,00"></span>
+    <div class="kpi-l p" style="color:inherit" data-wd="8.56,0.1" data-wd-times="8.56">минут</div>
+  </div>
+  <div class="gap2"></div>
+  <div class="win meet glass" id="bt" style="width:800px" data-in="8.96" data-a="rise">
+    <div class="win-bar"><i></i><i></i><i></i><b>в звонке</b></div>
+    <div class="win-body">
+      <div class="tile ptile on" style="height:400px"><i class="mi">smart_toy</i><span class="nm">ты (бот)</span></div>
+      <div class="li" style="font-size:48px;display:flex;align-items:center;gap:24px"><span style="flex:1" data-wd="10.48,0.1" data-wd-times="10.48">кивать</span><i class="tog" data-mk="10.48"></i></div>
+    </div>
+  </div>
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s black wall pal-amber" data-s="11.1" data-e="14.6" data-tr="dots" data-dots-dir="left" style="--wall:url(../../video/wallpapers/9c04778ad052f16661826024b3696ba7.jpg)" data-camk="14.1 #lr 1.12 .8" data-punch="14.00:.02">
+  <div id="t3" data-camera-keep class="h2" data-wd="11.28,0.1" data-wd-times="11.28,11.68,12.00">Каждые <span class="acc">4 минуты</span></div>
+  <div class="gap2"></div>
+  <div class="tbl logt" style="--cols:180px 1fr">
+    <div class="tr" data-in="12.0" data-a="rise"><span class="mut">11:04</span><span>у меня пропадает связь</span></div>
+    <div class="tr" data-in="12.48" data-a="rise"><span class="mut">11:08</span><span>у меня пропадает связь</span></div>
+    <div class="tr" data-in="13.04" data-a="rise"><span class="mut">11:12</span><span>у меня пропадает связь</span></div>
+    <div class="tr on" id="lr" data-in="13.40" data-a="rise"><span>11:16</span><span>у меня пропадает связь</span></div>
+  </div>
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-purple" data-s="14.6" data-e="19.5" data-tr="dots" data-dots-dir="down" data-wipe="540,1100" data-camk="16.6 #ex 1.08 .9">
+  <div id="t4" data-camera-keep class="h2" data-wd="14.72,0.1" data-wd-times="14.72,15.16">Тариф <span class="acc">Про</span></div>
+  <div class="gap"></div>
+  <div class="seg fit"><span>Free</span><span class="on" data-in="15.16" data-a="rise" style="background:var(--pal-fg);color:var(--pal-bg)">Pro</span></div>
+  <div class="gap2"></div>
+  <div class="p" data-wd="15.36,0.1" data-wd-times="15.36,15.80">добавил отмазки</div>
+  <div class="gap"></div>
+  <div class="list exl" id="ex">
+    <div class="li" data-in="16.72" data-a="rise"><span class="ib"><i class="mi">local_shipping</i></span><span style="flex:1">курьер у двери</span><i class="chk" data-mk="16.72"></i></div>
+    <div class="li" data-in="17.28" data-a="rise"><span class="ib"><i class="mi">keyboard</i></span><span style="flex:1">кот на клавиатуре</span><i class="chk" data-mk="17.28"></i></div>
+    <div class="li" data-in="18.53" data-a="rise"><span class="ib"><i class="mi">construction</i></span><span style="flex:1">соседи сверлят</span><i class="chk" data-mk="18.53"></i></div>
+  </div>
+  <img class="pic" src="../video/13-call-skip-bot/img/22-dancing-cat-upscaled.png" style="width:330px;height:330px;object-fit:cover;position:absolute;right:65px;top:1440px" data-in="17.28" data-a="rise" alt="">
+</section>
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-teal" data-s="19.5" data-e="24.9" data-tr="dots" data-dots-dir="right" style="--wall:url(../../video/wallpapers/i%20%281%29.webp)" data-camk="23.2 #inv 1.08 1.2" data-punch="21.84:.02">
+  <div id="t5" data-camera-keep class="h2" data-wd="19.68,0.1" data-wd-times="19.68,20.08,21.52,21.84">Через месяц: <span class="acc">одни боты</span></div>
+  <div class="gap"></div>
+  <div class="win meet" id="mg2">
+    <div class="win-bar"><i></i><i></i><i></i><b>Созвон 11:00 · дейли</b></div>
+    <div class="win-body"><div class="mgrid g3">
+      <div class="tile ptile">ТЛ<span class="botov" data-in="21.04" data-a="rise"><i class="mi">smart_toy</i></span></div>
+      <div class="tile ptile">АК<span class="botov" data-in="21.2" data-a="rise"><i class="mi">smart_toy</i></span></div>
+      <div class="tile ptile">МР<span class="botov" data-in="21.36" data-a="rise"><i class="mi">smart_toy</i></span></div>
+      <div class="tile ptile">ОЛ<span class="botov" data-in="21.52" data-a="rise"><i class="mi">smart_toy</i></span></div>
+      <div class="tile ptile">ДС<span class="botov" data-in="21.68" data-a="rise"><i class="mi">smart_toy</i></span></div>
+      <div class="tile ptile on"><i class="mi">smart_toy</i></div>
+    </div></div>
+  </div>
+  <div class="gap2"></div>
+  <div class="toast glass" id="inv" style="width:800px" data-in="22.92" data-a="blur"><span class="ib solid"><i class="mi">event</i></span><div><b data-wd="22.92,0.1" data-wd-times="22.92,23.68,23.92,24.16">Назначен еще один созвон</b><span>тема: итоги созвона</span></div></div>
+</section>
+<section data-camdim=".7" data-camfit="safe" class="s white pal-lime" data-s="24.9" data-e="29.6" data-tr="dots" data-dots-dir="up" style="justify-content:flex-start;padding-top:290px" data-camk="28.1 #zero 1.1 .8" data-punch="27.92:.02">
+  <div id="t6" data-camera-keep class="h2" data-lines="25.04,25.44,26.08">Самая продуктивная <span class="acc">встреча</span></div>
+  <div class="gap"></div>
+  <div class="p" data-wd="26.48,0.1" data-wd-times="26.48,26.56,27.23,27.28,27.68">в компании - та, где</div>
+  <div class="gap2"></div>
+  <div class="card kpi fitr" id="zero" style="padding:40px 80px;width:620px;align-items:center">
+    <span class="num acc" style="font-size:380px;line-height:.9" data-in="27.92" data-a="rise">0</span>
+    <div class="kpi-l p" style="color:inherit;font-size:60px" data-wd="27.92,0.1" data-wd-times="28.16">людей</div>
+  </div>
+  <img class="ava bl" src="../video/avatar/bl.png" data-in="26.08" data-a="rise" style="--ava-h:440px" alt="">
+</section>
+<section class="s white pal-sky outro" data-s="29.6" data-e="32.1" data-tr="dots" data-dots-dir="left" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам); p5-motion - роллер data-roll, курсор data-cur, перецентровка data-grow -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="components/p5-ui.js"></script>
+<script src="runtime/p5-camera.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

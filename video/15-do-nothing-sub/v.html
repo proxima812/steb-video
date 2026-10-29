@@ -1,0 +1,161 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Копируется в video/N-slug/v.html: ссылки на движок считаются от engine/, свои файлы ролика - ../video/N-slug/... -->
+<base href="../../engine/">
+<link rel="stylesheet" href="styles/fonts-p5.css"><link rel="stylesheet" href="styles/base.css"><link rel="stylesheet" href="styles/preset-minimal.css"><link rel="stylesheet" href="styles/preset-dynamic.css"><link rel="stylesheet" href="styles/p5-world.css"><link rel="stylesheet" href="styles/p5-ui.css">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/examples/jsm/":"./node_modules/three/examples/jsm/"}}</script>
+<style>
+/* пресет default (DESIGN-SYSTEM.md). Сцены .white / .black (темные на обоях .wall), акцент pal-*. Старые комнаты не используем.
+   Цвета - только переменные p5-world.css. Без scale-анимаций, движение делает runtime/preset-dynamic.js (body.p5w).
+   Текст: data-txt="blur" - слово в свое время поднимается на 3px из размытия 4px. Заголовки - data-lines (split-type, времена слов
+   из words.json); длинную фразу озвучки на экран не выводим: короткий заголовок + смысловая графика (engine/examples/text-blur-demo.html).
+   data-wd - для коротких подписей с иконкой .mi (data-lines иконки не поддерживает). */
+.p5w .s .h2{font-size:124px;line-height:1.02}
+.p5w .s .h2.big{font-size:150px}
+.p5w .s .p{font-size:54px}
+.p5w .s .huge{font-size:230px;line-height:.95;letter-spacing:-8px}
+.fit{align-self:flex-start;width:fit-content}
+.fitr{align-self:flex-end;width:fit-content}
+.hook-top{display:flex;align-items:center;justify-content:space-between;width:950px}
+.pricecard{padding:30px 44px}
+.pricecard .cur{display:block;margin-top:14px;font-family:Inter;font-weight:700;font-size:64px;letter-spacing:-2px}
+.p5w .s .bub{font-size:62px;max-width:930px;padding:36px 44px}
+.p5w .s .bub-who{font-size:36px}
+.p5w .s .code5{font-size:46px;width:950px;line-height:1.45}
+.app{width:800px;align-self:center}
+.app .win-body{align-items:center;gap:40px;padding:56px 36px}
+.bigbtn{width:400px;height:400px;border-radius:50%;padding:0;font-size:96px;font-family:Inter;font-weight:800;letter-spacing:-3px;translate:0 calc(var(--press,0)*6px)}
+.cert{width:800px;align-self:center;padding:40px 48px}
+.cert .h3{font-family:Inter;font-weight:700;font-size:56px;letter-spacing:-1.5px}
+.cert .p{font-size:64px;font-weight:500}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:30px;width:950px}
+.plans .card{padding:36px;display:flex;flex-direction:column;gap:22px;min-height:470px}
+.plans .nm{font-family:Inter;font-weight:700;font-size:72px;letter-spacing:-1.5px}
+.plans .txt{font-size:56px;line-height:1.2}
+.plans .card.on{background:var(--pal-bg);color:var(--pal-fg);box-shadow:none}
+.plans .card.on .tag{background:var(--pal-fg);color:var(--pal-bg)}
+.p5w .s .plans .tag{font-size:36px;align-self:flex-start}
+.lock{display:flex;flex-direction:column;align-items:center;width:950px}
+.lock .num{font-size:230px;line-height:1}
+.lock .dt{font-size:46px;color:inherit}
+.p5w .s .toast{font-size:40px;width:950px}.p5w .s .toast b{font-size:48px}
+.p5w .s .toast.big b{font-size:64px;line-height:1.1}
+.p5w .s .toast.big .ib{font-size:96px}
+.p5w .s .tbl.commits{width:950px}
+.p5w .s .commits .tr{font-size:56px;padding-top:34px;padding-bottom:34px}
+.p5w .s .chat .bub.me{font-size:72px}
+.seen{font-size:46px;color:var(--mut);align-self:flex-end}
+.p5w .s .win-bar{font-size:34px}
+#sub b{font-size:58px}#sub{font-size:44px}
+
+</style>
+</head><body class="p5w" data-txt="blur">
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-mint" data-s="0" data-e="4.7" style="--wall:url(../../video/wallpapers/9bacc59179f3405ae0d7a1afe6dfe137.jpg);justify-content:flex-start;padding-top:270px" data-camk="1.6 #pc 1.1 .9; 3.0 c 1 .8" data-punch="1.12:.02; 3.36:.015">
+  <div id="t0" data-camera-keep class="h2" data-wd="0.15,0.15" data-wd-times="0.15,0.32,0.45">Подписка <span class="acc">на безделье</span></div>
+  <div class="gap"></div>
+  <div class="hook-top">
+    <div class="card pricecard glass" id="pc">
+      <span class="num roll cells acc" style="font-size:210px" data-roll="0,1.12,990,000"></span><span class="cur" data-wd="1.12,0.1" data-wd-times="1.12,1.52,1.60">₽ в месяц</span>
+    </div>
+    <img class="pic" src="../video/15-do-nothing-sub/img/absurd-capybara-fridge.png" style="width:250px;height:250px;object-fit:cover" data-in="1.3" data-a="rise" alt="">
+  </div>
+  <div class="gap2"></div>
+  <div id="t1" data-camera-keep class="h2" data-wd="2.48,0.1" data-wd-times="2.48,2.56">за разрешение</div>
+  <div class="num huge acc" id="big" data-in="3.36" data-a="rise">НИЧЕГО</div>
+  <div class="h2" style="font-size:110px" data-wd="4.0,0.1" data-wd-times="4.0,4.16">не делать</div>
+  <img class="ava bl" src="../video/avatar/bl.png" style="--ava-h:380px" alt="">
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-violet" data-s="4.7" data-e="9.5" data-tr="dots" data-dots-dir="right" data-camk="8.0 #cd 1.08 .9">
+  <div id="t2" data-camera-keep class="h2" data-wd="5.08,0.1" data-wd-times="5.08,5.52">Попросил <span class="acc">нейросеть</span></div>
+  <div class="gap2"></div>
+  <div class="chat"><div class="bub me"><span class="bub-who">ты</span><span data-wd="6.48,0.1" data-wd-times="6.48,6.88,7.57,7.92,8.40,8.64,8.96">сделай приложение, чтобы отдыхать без чувства вины</span></div></div>
+  <div class="gap2"></div>
+  <div class="code5" id="cd">
+    <div data-in="8.4" data-a="rise"><span class="k">if</span> (guilt <span class="k">&gt;</span> <span class="n">0</span>) {</div>
+    <div data-in="8.64" data-a="rise">&nbsp;&nbsp;guilt <span class="k">=</span> <span class="n">0</span></div>
+    <div data-in="8.96" data-a="rise">}</div>
+  </div>
+</section>
+<section data-camdim="0" data-camfit="safe" class="s black wall pal-amber" data-s="9.5" data-e="14.4" data-tr="dots" data-dots-dir="up" data-wipe="540,960" style="--wall:url(../../video/wallpapers/i%20%282%29.webp)" data-cur="10.9 760,1500; 11.0 #mz click .5; 12.2 hide" data-camk="13.1 #ct 1.1 .8" data-punch="13.84:.02">
+  <div id="t3" data-camera-keep class="h2" data-wd="9.68,0.1" data-wd-times="9.68,9.92,10.40,10.72">Она сделала <span class="acc">одну кнопку</span></div>
+  <div class="gap2"></div>
+  <div class="win app glass" data-in="10.0" data-a="rise">
+    <div class="win-bar"><i></i><i></i><i></i><b>Можно · приложение</b></div>
+    <div class="win-body"><button class="btn bigbtn" id="mz">Можно</button></div>
+  </div>
+  <div class="gap"></div>
+  <div class="card cert" id="ct" data-in="12.64" data-a="blur">
+    <div class="h3"><span class="iw"><i class="mi">verified</i> Справка</span></div>
+    <div class="gap"></div>
+    <div class="p" data-wd="13.40,0.1" data-wd-times="13.40,13.84">тебе <span class="acc">можно</span></div>
+  </div>
+</section>
+<section data-camdim="0" data-camfit="safe" class="s white pal-orange" data-s="14.4" data-e="19.0" data-tr="dots" data-dots-dir="left" data-camk="17.0 #pro 1.08 .9">
+  <div class="plans">
+    <div class="card" id="free" data-camera-keep data-in="14.56" data-a="rise">
+      <div class="nm">Бесплатно</div>
+      <div class="txt" data-wd="15.41,0.1" data-wd-times="15.41,15.60,15.92">5 минут безделья</div>
+      <span class="tag" style="color:inherit"><i class="mi">campaign</i> с рекламой</span>
+    </div>
+    <div class="card on" id="pro" data-in="16.80" data-a="rise">
+      <div class="nm">990 ₽</div>
+      <div class="txt" data-wd="16.80,0.1" data-wd-times="16.80,17.01">без рекламы</div>
+      <span class="tag" data-in="17.73" data-a="rise">только по подписке</span>
+    </div>
+  </div>
+  <div class="gap2"></div>
+  <img class="pic" id="mem" data-camera-keep src="../video/15-do-nothing-sub/img/besplatno-upscaled.png" style="width:950px;height:420px;object-fit:cover;object-position:center 85%" data-in="14.56" data-a="rise" alt="">
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s white pal-blue" data-s="19.0" data-e="23.0" data-tr="dots" data-dots-dir="down" data-camk="20.6 #push 1.1 .9">
+  <div class="lock">
+    <div class="num" data-in="19.12" data-a="rise">14:05</div>
+    <div class="dt" data-wd="19.03,0.1" data-wd-times="19.03,19.12">а потом</div>
+  </div>
+  <div class="gap2"></div>
+  <div class="toast big" id="push" data-in="19.60" data-a="blur"><span class="ib solid"><i class="mi">notifications</i></span><div><b data-wd="20.32,0.1" data-wd-times="20.32,20.48,21.16,22.00">Вы отдыхаете недостаточно расслабленно</b><span style="color:inherit">Можно · сейчас</span></div></div>
+  <div class="gap"></div>
+  <div class="toast" data-in="22.0" data-a="blur" style="opacity:.9"><span class="ib"><i class="mi">self_improvement</i></span><div><b>Отдыхайте эффективнее</b><span>Можно · 1 мин назад</span></div></div>
+</section>
+<section data-camdim=".55" data-camfit="safe" class="s black wall pal-grape" data-s="23.0" data-e="25.6" data-tr="dots" data-dots-dir="right" style="--wall:url(../../video/wallpapers/3WPuzddwAIWq.webp)" data-camk="24.7 #cm 1.08 .8">
+  <div id="t6" data-camera-keep class="h2" data-wd="23.11,0.1" data-wd-times="23.11,23.84">Финал: <span class="acc">агент</span></div>
+  <div class="gap2"></div>
+  <div class="tbl commits" id="cm" style="--cols:1fr 200px">
+    <div class="tr th"><span>коммит</span><span class="r">автор</span></div>
+    <div class="tr" data-in="24.24" data-a="rise"><span>кнопка «Можно»</span><span class="r">агент</span></div>
+    <div class="tr" data-in="24.64" data-a="rise"><span>справка</span><span class="r">агент</span></div>
+    <div class="tr" data-in="24.96" data-a="rise"><span>подписка</span><span class="r">агент</span></div>
+  </div>
+</section>
+<section data-camdim=".7" data-camfit="safe" class="s black wall pal-grape" data-s="25.6" data-e="29.6" data-tr="dots" data-dots-dir="up" style="--wall:url(../../video/wallpapers/3WPuzddwAIWq.webp)" data-camk="27.9 #ch 1.08 .8" data-punch="26.48:.02">
+  <div class="toast glass" id="sub" data-in="26.04" data-a="blur"><span class="ib solid"><i class="mi">workspace_premium</i></span><div><b data-wd="25.76,0.1" data-wd-times="25.76,26.04,26.48">Сам оформил подписку</b><span>агент · 990 ₽ в месяц</span></div></div>
+  <div class="gap2"></div>
+  <div class="chat" id="ch" data-safe>
+    <div class="bub me" data-in="27.52" data-a="blur"><span class="bub-who">ты</span>почини баг</div>
+    <div class="bub me" data-in="27.76" data-a="blur">ты тут?</div>
+    <div class="seen" data-wd="27.76,0.1" data-wd-times="27.76,28.24">не отвечает</div>
+  </div>
+  <img class="ava bl" src="../video/avatar/mid.png" data-in="27.52" data-a="rise" style="--ava-h:520px" alt="">
+</section>
+<section class="s white pal-sky outro" data-s="29.6" data-e="32.1" data-tr="dots" data-dots-dir="left" data-wipe="540,960" data-deco="none"></section>
+<!-- движок мира (с ролика 37): кривые, Anime.js (морфинг, путь), D3 (графики), split-type (заголовки по строкам); p5-motion - роллер data-roll, курсор data-cur, перецентровка data-grow -->
+<script src="node_modules/animejs/dist/bundles/anime.umd.min.js"></script>
+<script src="node_modules/d3-array/dist/d3-array.min.js"></script><script src="node_modules/d3-color/dist/d3-color.min.js"></script>
+<script src="node_modules/d3-interpolate/dist/d3-interpolate.min.js"></script><script src="node_modules/d3-format/dist/d3-format.min.js"></script>
+<script src="node_modules/d3-time/dist/d3-time.min.js"></script><script src="node_modules/d3-time-format/dist/d3-time-format.min.js"></script>
+<script src="node_modules/d3-scale/dist/d3-scale.min.js"></script><script src="node_modules/d3-path/dist/d3-path.min.js"></script>
+<script src="node_modules/d3-shape/dist/d3-shape.min.js"></script>
+<script src="node_modules/split-type/umd/index.min.js"></script>
+<script src="runtime/p5-ease.js"></script><script src="runtime/p5-anime.js"></script><script src="runtime/p5-lines.js"></script><script src="runtime/p5-motion.js"></script><script src="runtime/p5-d3.js"></script>
+<!-- здесь свой скрипт ролика: графики P5D3.plot, window.p5hook -->
+<script src="components/p5-ui.js"></script>
+<script src="runtime/p5-camera.js"></script>
+<script src="runtime/engine.js"></script>
+<script src="runtime/preset-dynamic.js"></script>
+<script src="runtime/preset-minimal.js"></script>
+<script>
+if(location.search.includes('safe'))document.body.classList.add('safe-debug');
+init();
+</script>
+<!-- 3D: <canvas id="c-x" width="900" height="520"></canvas> внутри .stage + модуль (в отдельном video/N-slug/three.mjs импорт движка - '../../engine/components/p5-world-three.mjs'):
+<script type="module">import {view,start} from './components/p5-world-three.mjs'; view('c-x',k=>t=>{}); window.VIDEO_READY=start();</script> -->
+</body></html>

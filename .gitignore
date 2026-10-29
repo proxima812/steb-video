@@ -1,0 +1,38 @@
+# Зависимости и сборка
+node_modules/
+studio/dist/
+__pycache__/
+*.pyc
+*.log
+
+# Секреты и локальные настройки
+.env
+.env.*
+.mcp.json
+.claude/settings.local.json
+
+# Системное
+.DS_Store
+
+# Результаты и черновики роликов
+output/
+work/
+
+# Медиа: фото, голоса, музыка, видео
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.avif
+*.heic
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.ogg
+*.flac
+*.mp4
+*.mov
+*.webm
+*.mkv
